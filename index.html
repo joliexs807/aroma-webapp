@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Aurora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #eef1ff, #ffffff);
+      color: #222;
+      text-align: center;
+    }
+    h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 32px;
+    }
+    .button {
+      width: 100%;
+      max-width: 320px;
+      margin: 12px auto;
+      padding: 16px;
+      font-size: 16px;
+      border-radius: 18px;
+      border: none;
+      cursor: pointer;
+      display: block;
+    }
+    .human {
+      background: #6c63ff;
+      color: #fff;
+    }
+    .light {
+      background: #ffffff;
+      color: #6c63ff;
+      border: 2px solid #6c63ff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Aurora</h1>
+  <p>Выбери, с какой стороны ты сейчас</p>
+
+  <button class="button human" onclick="chooseRole('human')">
+    🌱 Я человек
+  </button>
+
+  <button class="button light" onclick="chooseRole('light')">
+    ✨ Я свет
+  </button>
+
+  <script>
+    const tg = Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    function chooseRole(role) {
+      tg.sendData(JSON.stringify({ role }));
+      tg.close();
+    }
+  </script>
+
+</body>
+</html>
