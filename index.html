@@ -33,29 +33,50 @@ p { font-size:16px; opacity:0.8; margin-bottom:32px; }
 
 .button:hover { transform: scale(1.05); }
 
-.human { background:#6c63ff; color:#fff; }
-.light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; }
+.human { background:#6c63ff; color:#fff; animation: glow-human 2s ease-in-out infinite alternate; }
+.light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; animation: glow-light 2s ease-in-out infinite alternate; }
 
-/* Сияние и блеск кнопок */
-.human.active, .human:hover {
-  box-shadow: 0 0 25px rgba(108, 99, 255,0.8), 0 0 50px rgba(108, 99, 255,0.5);
-  animation: sparkle-human 0.6s ease-out;
+/* Постоянное мерцание кнопок */
+@keyframes glow-human {
+  0% { box-shadow: 0 0 15px rgba(108,99,255,0.5),0 0 30px rgba(108,99,255,0.3); }
+  50% { box-shadow: 0 0 25px rgba(108,99,255,0.8),0 0 50px rgba(108,99,255,0.5); }
+  100% { box-shadow: 0 0 15px rgba(108,99,255,0.5),0 0 30px rgba(108,99,255,0.3); }
 }
-.light.active, .light:hover {
-  box-shadow: 0 0 25px rgba(255, 255, 200,0.8), 0 0 50px rgba(255, 255, 200,0.5);
-  animation: sparkle-light 0.6s ease-out;
+@keyframes glow-light {
+  0% { box-shadow: 0 0 15px rgba(255,255,200,0.5),0 0 30px rgba(255,255,200,0.3); }
+  50% { box-shadow: 0 0 25px rgba(255,255,200,0.8),0 0 50px rgba(255,255,200,0.5); }
+  100% { box-shadow: 0 0 15px rgba(255,255,200,0.5),0 0 30px rgba(255,255,200,0.3); }
 }
 
-/* Анимация блеска */
+/* Сияние при клике */
+.human.active { animation: sparkle-human 0.6s ease-out; }
+.light.active { animation: sparkle-light 0.6s ease-out; }
+
 @keyframes sparkle-human {
-  0% { box-shadow: 0 0 10px rgba(108, 99, 255,0.6), 0 0 20px rgba(108, 99, 255,0.3); }
-  50% { box-shadow: 0 0 40px rgba(108, 99, 255,0.9), 0 0 80px rgba(108, 99, 255,0.6); }
-  100% { box-shadow: 0 0 25px rgba(108, 99, 255,0.8), 0 0 50px rgba(108, 99, 255,0.5); }
+  0% { box-shadow:0 0 10px rgba(108,99,255,0.6),0 0 20px rgba(108,99,255,0.3);}
+  50% { box-shadow:0 0 40px rgba(108,99,255,0.9),0 0 80px rgba(108,99,255,0.6);}
+  100% { box-shadow:0 0 25px rgba(108,99,255,0.8),0 0 50px rgba(108,99,255,0.5);}
 }
 @keyframes sparkle-light {
-  0% { box-shadow: 0 0 10px rgba(255, 255, 200,0.6), 0 0 20px rgba(255, 255, 200,0.3); }
-  50% { box-shadow: 0 0 40px rgba(255, 255, 200,0.9), 0 0 80px rgba(255, 255, 200,0.6); }
-  100% { box-shadow: 0 0 25px rgba(255, 255, 200,0.8), 0 0 50px rgba(255, 255, 200,0.5); }
+  0% { box-shadow:0 0 10px rgba(255,255,200,0.6),0 0 20px rgba(255,255,200,0.3);}
+  50% { box-shadow:0 0 40px rgba(255,255,200,0.9),0 0 80px rgba(255,255,200,0.6);}
+  100% { box-shadow:0 0 25px rgba(255,255,200,0.8),0 0 50px rgba(255,255,200,0.5);}
+}
+
+/* Звёздочки */
+.star {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
+  border-radius:50%;
+  pointer-events: none;
+  opacity:0;
+  animation: star-fade 1s linear forwards;
+}
+@keyframes star-fade {
+  0% { opacity:1; transform: scale(0.3) translate(0,0);}
+  50% { transform: scale(1.2) translate(var(--x), var(--y)); opacity:1;}
+  100% { opacity:0; transform: scale(0) translate(var(--x), var(--y));}
 }
 
 .result { margin-top:24px; font-size:20px; font-weight:bold; opacity:0; transition: opacity 0.5s ease; }
@@ -76,30 +97,41 @@ p { font-size:16px; opacity:0.8; margin-bottom:32px; }
 <script>
 let points = 0;
 
+// Функция для создания звездочек
+function createStars(btn){
+    for(let i=0;i<5;i++){
+        const star = document.createElement('div');
+        star.className='star';
+        const x = (Math.random()*100-50)+'px';
+        const y = (Math.random()*100-50)+'px';
+        star.style.setProperty('--x', x);
+        star.style.setProperty('--y', y);
+        btn.appendChild(star);
+        setTimeout(()=>{ star.remove(); },1000);
+    }
+}
+
 function chooseRole(role, btn){
     const resultDiv = document.getElementById('result');
     const scoreDiv = document.getElementById('score');
 
-    // Начисляем очки
-    points += 10;
+    points +=10;
 
-    // Текст сообщения
-    if(role === 'human'){
-        resultDiv.textContent = "🌱 Отлично! Ты выбрал Человек! +10 очков";
-    } else {
-        resultDiv.textContent = "✨ Отлично! Ты выбрал Свет! +10 очков";
-    }
+    resultDiv.textContent = role==='human' 
+        ? "🌱 Отлично! Ты выбрал Человек! +10 очков"
+        : "✨ Отлично! Ты выбрал Свет! +10 очков";
 
-    // Показ результата
-    resultDiv.style.opacity = 1;
+    resultDiv.style.opacity =1;
     scoreDiv.textContent = `Очки: ${points}`;
 
-    // Активное сияние кнопки
+    // Сияние при клике
     btn.classList.add('active');
-    setTimeout(() => { btn.classList.remove('active'); }, 600);
+    setTimeout(()=>{ btn.classList.remove('active'); },600);
 
-    // Скрываем текст через 2 секунды
-    setTimeout(() => { resultDiv.style.opacity = 0; }, 2000);
+    // Создаем звезды
+    createStars(btn);
+
+    setTimeout(()=>{ resultDiv.style.opacity=0; },2000);
 }
 </script>
 
