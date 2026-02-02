@@ -13,23 +13,49 @@ body {
   color:#222;
   text-align:center;
 }
+
 h1 { font-size:30px; margin-bottom:8px; }
 p { font-size:16px; opacity:0.8; margin-bottom:32px; }
+
 .button {
-  width:100%; max-width:320px; margin:12px auto; padding:16px;
-  font-size:16px; border-radius:18px; border:none; cursor:pointer;
-  display:block; transition: transform 0.2s, box-shadow 0.3s;
+  width:100%; max-width:320px;
+  margin:12px auto;
+  padding:16px;
+  font-size:16px;
+  border-radius:18px;
+  border:none;
+  cursor:pointer;
+  display:block;
+  transition: transform 0.2s, box-shadow 0.3s;
   position: relative;
+  overflow: hidden;
 }
+
 .button:hover { transform: scale(1.05); }
+
 .human { background:#6c63ff; color:#fff; }
 .light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; }
-/* Сияние кнопок при наведении и при нажатии */
-.human.active, .human:hover {
-  box-shadow: 0 0 25px rgba(108, 99, 255,0.8), 0 0 50px rgba(108, 99, 255,0.5);
+
+/* Сияние и блеск */
+.human.active {
+  box-shadow: 0 0 30px rgba(108, 99, 255,0.8), 0 0 60px rgba(108, 99, 255,0.5);
+  animation: sparkle-human 0.6s ease-out;
 }
-.light.active, .light:hover {
-  box-shadow: 0 0 25px rgba(255, 255, 200,0.8), 0 0 50px rgba(255, 255, 200,0.5);
+.light.active {
+  box-shadow: 0 0 30px rgba(255, 255, 200,0.8), 0 0 60px rgba(255, 255, 200,0.5);
+  animation: sparkle-light 0.6s ease-out;
+}
+
+/* Анимация блеска */
+@keyframes sparkle-human {
+  0% { box-shadow: 0 0 10px rgba(108, 99, 255,0.6), 0 0 20px rgba(108, 99, 255,0.3); }
+  50% { box-shadow: 0 0 40px rgba(108, 99, 255,0.9), 0 0 80px rgba(108, 99, 255,0.6); }
+  100% { box-shadow: 0 0 30px rgba(108, 99, 255,0.8), 0 0 60px rgba(108, 99, 255,0.5); }
+}
+@keyframes sparkle-light {
+  0% { box-shadow: 0 0 10px rgba(255, 255, 200,0.6), 0 0 20px rgba(255, 255, 200,0.3); }
+  50% { box-shadow: 0 0 40px rgba(255, 255, 200,0.9), 0 0 80px rgba(255, 255, 200,0.6); }
+  100% { box-shadow: 0 0 30px rgba(255, 255, 200,0.8), 0 0 60px rgba(255, 255, 200,0.5); }
 }
 
 .result { margin-top:24px; font-size:20px; font-weight:bold; opacity:0; transition: opacity 0.5s ease; }
@@ -54,7 +80,7 @@ function chooseRole(role, btn){
     const resultDiv = document.getElementById('result');
     const scoreDiv = document.getElementById('score');
 
-    // Начисляем очки и сообщение
+    // Начисляем очки
     points += 10;
     if(role === 'human'){
         resultDiv.textContent = "🌱 Отлично! Ты выбрал Человек! +10 очков";
@@ -66,11 +92,11 @@ function chooseRole(role, btn){
     resultDiv.style.opacity = 1;
     scoreDiv.textContent = `Очки: ${points}`;
 
-    // Активное сияние кнопки
+    // Сияние и блеск кнопки
     btn.classList.add('active');
-    setTimeout(() => { btn.classList.remove('active'); }, 300);
+    setTimeout(() => { btn.classList.remove('active'); }, 600);
 
-    // Скрываем текст через 2 сек
+    // Скрываем текст через 2 секунды
     setTimeout(() => { resultDiv.style.opacity = 0; }, 2000);
 }
 </script>
