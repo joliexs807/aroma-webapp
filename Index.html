@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora</title>
+<style>
+body { margin:0; padding:24px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:linear-gradient(180deg,#eef1ff,#ffffff); color:#222; text-align:center; }
+h1 { font-size:30px; margin-bottom:8px; }
+p { font-size:16px; opacity:0.8; margin-bottom:32px; }
+.button { width:100%; max-width:320px; margin:12px auto; padding:16px; font-size:16px; border-radius:18px; border:none; cursor:pointer; transition: transform 0.2s; display:block; }
+.button:hover { transform: scale(1.05); }
+.human { background:#6c63ff; color:#fff; }
+.light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; }
+.result { margin-top:24px; font-size:20px; font-weight:bold; opacity:0; transition: opacity 0.5s ease; }
+.score { margin-top:16px; font-size:18px; }
+</style>
+</head>
+<body>
+
+<h1>✨ Aurora</h1>
+<p>Выбери, с какой стороны ты сейчас</p>
+
+<button class="button human" onclick="chooseRole('human')">🌱 Я человек</button>
+<button class="button light" onclick="chooseRole('light')">✨ Я свет</button>
+
+<div class="result" id="result"></div>
+<div class="score" id="score">Очки: 0</div>
+
+<script>
+let points = 0;
+
+function chooseRole(role){
+    const resultDiv = document.getElementById('result');
+    const scoreDiv = document.getElementById('score');
+
+    if(role === 'human'){
+        points += 10;
+        resultDiv.textContent = "🌱 Отлично! Ты выбрал Человек! +10 очков";
+    } else if(role === 'light'){
+        points += 10;
+        resultDiv.textContent = "✨ Отлично! Ты выбрал Свет! +10 очков";
+    }
+
+    resultDiv.style.opacity = 1;
+    scoreDiv.textContent = `Очки: ${points}`;
+
+    setTimeout(() => {
+        resultDiv.style.opacity = 0;
+    }, 2000);
+}
+</script>
+
+</body>
+</html>
