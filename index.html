@@ -5,15 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aurora</title>
 <style>
-body { margin:0; padding:24px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:linear-gradient(180deg,#eef1ff,#ffffff); color:#222; text-align:center; }
+body {
+  margin:0;
+  padding:24px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background: linear-gradient(180deg,#eef1ff,#ffffff);
+  color:#222;
+  text-align:center;
+  overflow: hidden;
+}
 h1 { font-size:30px; margin-bottom:8px; }
 p { font-size:16px; opacity:0.8; margin-bottom:32px; }
-.button { width:100%; max-width:320px; margin:12px auto; padding:16px; font-size:16px; border-radius:18px; border:none; cursor:pointer; transition: transform 0.2s; display:block; }
-.button:hover { transform: scale(1.05); }
+.button {
+  width:100%; max-width:320px; margin:12px auto; padding:16px;
+  font-size:16px; border-radius:18px; border:none; cursor:pointer;
+  display:block; transition: transform 0.2s, box-shadow 0.3s;
+  position: relative;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.button:hover {
+  transform: scale(1.05);
+}
 .human { background:#6c63ff; color:#fff; }
 .light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; }
+/* Сияние кнопок */
+.human:hover {
+  box-shadow: 0 0 20px rgba(108, 99, 255,0.8), 0 0 40px rgba(108, 99, 255,0.5);
+}
+.light:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 200,0.8), 0 0 40px rgba(255, 255, 200,0.5);
+}
+
 .result { margin-top:24px; font-size:20px; font-weight:bold; opacity:0; transition: opacity 0.5s ease; }
 .score { margin-top:16px; font-size:18px; }
+
+/* Сгусток энергии */
+.orb {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,200,1) 0%, rgba(255,255,200,0) 70%);
+  opacity: 0;
+  pointer-events: none;
+  animation: pulse 1s ease-out forwards;
+}
+@keyframes pulse {
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.7; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Человечек */
+.human-icon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: #6c63ff;
+  border-radius: 50% 50% 10% 10%;
+  opacity: 0;
+  pointer-events: none;
+  animation: pop 0.8s ease-out forwards;
+}
+@keyframes pop {
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 </style>
 </head>
 <body>
@@ -34,20 +92,42 @@ function chooseRole(role){
     const resultDiv = document.getElementById('result');
     const scoreDiv = document.getElementById('score');
 
+    // Начисление очков и сообщение
     if(role === 'human'){
         points += 10;
         resultDiv.textContent = "🌱 Отлично! Ты выбрал Человек! +10 очков";
+        showHuman();
     } else if(role === 'light'){
         points += 10;
         resultDiv.textContent = "✨ Отлично! Ты выбрал Свет! +10 очков";
+        showOrb();
     }
 
     resultDiv.style.opacity = 1;
     scoreDiv.textContent = `Очки: ${points}`;
 
-    setTimeout(() => {
-        resultDiv.style.opacity = 0;
-    }, 2000);
+    // Скрытие сообщения через 2 секунды
+    setTimeout(() => { resultDiv.style.opacity = 0; }, 2000);
+}
+
+// Сгусток энергии
+function showOrb(){
+    const orb = document.createElement('div');
+    orb.className = 'orb';
+    orb.style.left = (window.innerWidth/2 - 40 + (Math.random()*100-50)) + 'px';
+    orb.style.top = (window.innerHeight/2 - 40 + (Math.random()*100-50)) + 'px';
+    document.body.appendChild(orb);
+    setTimeout(() => { document.body.removeChild(orb); }, 1000);
+}
+
+// Человечек
+function showHuman(){
+    const human = document.createElement('div');
+    human.className = 'human-icon';
+    human.style.left = (window.innerWidth/2 - 25 + (Math.random()*100-50)) + 'px';
+    human.style.top = (window.innerHeight/2 - 25 + (Math.random()*100-50)) + 'px';
+    document.body.appendChild(human);
+    setTimeout(() => { document.body.removeChild(human); }, 1200);
 }
 </script>
 
