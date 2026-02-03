@@ -2,115 +2,34 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Личный кабинет — Аврора</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
-:root {
-  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
-  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
-  --text-dark: #fff;
-  --text-light: #222;
-  --button-dark: #b689f5;
-  --button-light: #d2aaff;
-  --shadow-dark: #b689f5;
-  --shadow-light: #d2aaff;
-}
-
-body{margin:0;font-family:'Comfortaa',cursive;background:var(--bg-dark);color:var(--text-dark);transition:background 0.5s,color 0.5s;}
-body.light{background:var(--bg-light);color:var(--text-light);}
-.container{max-width:900px;margin:auto;padding:30px;}
-h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark),0 0 30px var(--shadow-dark);}
-body.light h1{text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
-label{display:block;margin-top:15px;font-weight:bold;}
-input[type=text],textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:5px;transition:box-shadow 0.5s;}
-.avatar-preview{margin-top:10px;width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--shadow-dark);box-shadow:0 0 20px var(--shadow-dark);}
-body.light .avatar-preview{border-color:var(--shadow-light);box-shadow:0 0 20px var(--shadow-light);}
-.section{margin-bottom:25px;padding:15px;border-radius:15px;box-shadow:0 0 20px var(--shadow-dark);}
-body.light .section{box-shadow:0 0 15px var(--shadow-light);}
-.history ul{list-style:none;padding:0;}
-.history li{margin-bottom:8px;background:rgba(255,255,255,0.1);padding:8px;border-radius:10px;}
-.theme-toggle{position:absolute;top:20px;left:20px;padding:8px 15px;border-radius:20px;border:none;cursor:pointer;background: var(--button-dark); color:#fff;}
-body.light .theme-toggle{background: var(--button-light); color: var(--text-light);}
-</style>
+<title>Аврора — Личный кабинет</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
-<div class="container">
-<h1>Личный кабинет 🌒✨</h1>
 
-<div class="section">
-  <label>Роль:</label>
-  <input type="text" id="role" disabled/>
+<div class="container screen show">
+  <h1>Личный кабинет</h1>
+  <p>Роль: <span id="profileRole"></span></p>
+
+  <div>
+    <input type="text" id="nickname" placeholder="Твой ник"/>
+  </div>
+  <div>
+    <input type="file" id="avatar" accept="image/*"/>
+  </div>
+  <div>
+    <textarea id="hobbies" placeholder="Хобби"></textarea>
+  </div>
+  <div>
+    <textarea id="music" placeholder="Любимая музыка"></textarea>
+  </div>
 </div>
 
-<div class="section">
-  <label>Очки:</label>
-  <input type="text" id="score" disabled value="20"/>
-</div>
-
-<div class="section">
-  <label>Ник:</label>
-  <input type="text" id="nickname" placeholder="Придумай ник"/>
-</div>
-
-<div class="section">
-  <label>Аватар:</label>
-  <input type="file" id="avatarInput"/>
-  <img id="avatarPreview" class="avatar-preview"/>
-</div>
-
-<div class="section">
-  <label>Хобби:</label>
-  <textarea id="hobby" rows="2" placeholder="Напиши свои хобби"></textarea>
-</div>
-
-<div class="section">
-  <label>Любимая музыка:</label>
-  <textarea id="music" rows="2" placeholder="Напиши любимые песни или жанры"></textarea>
-</div>
-
-<div class="section">
-  <label>Настроение сейчас:</label>
-  <input type="text" id="mood" placeholder="Как ты себя чувствуешь"/>
-</div>
-
-<div class="section">
-  <label>Цитата/мантра:</label>
-  <textarea id="quote" rows="2" placeholder="Напиши свою цитату или мантру"></textarea>
-</div>
-
-<div class="section history">
-  <label>История действий:</label>
-  <ul id="historyList"></ul>
-</div>
-</div>
-
+<script src="js/main.js"></script>
 <script>
-function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');}
-
-const roleInput=document.getElementById('role');
-const historyList=document.getElementById('historyList');
-const avatarInput=document.getElementById('avatarInput');
-const avatarPreview=document.getElementById('avatarPreview');
-
 window.addEventListener('DOMContentLoaded',()=>{
-  const t=localStorage.getItem('theme')||'dark';
-  if(t==='light') document.body.classList.add('light');
-
-  const role=localStorage.getItem('userRole')||'';
-  const history=JSON.parse(localStorage.getItem('history')||'[]');
-  roleInput.value=role;
-  history.forEach(item=>{
-    const li=document.createElement('li'); li.textContent=item; historyList.appendChild(li);
-  });
-});
-
-avatarInput.addEventListener('change',function(e){
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=function(ev){ avatarPreview.src=ev.target.result; }
-  reader.readAsDataURL(file);
+  document.getElementById('profileRole').textContent = localStorage.getItem('userRole') || '';
 });
 </script>
 </body>
