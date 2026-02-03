@@ -25,6 +25,7 @@
     align-items: center;
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.5s ease;
   }
 
   .screen.show {
@@ -32,18 +33,26 @@
     pointer-events: all;
   }
 
+  .text-block {
+    background: rgba(26, 10, 46, 0.4); /* полупрозрачный тёмный блок */
+    padding: 20px 30px;
+    border-radius: 15px;
+    text-align: center;
+  }
+
   h1 {
     font-size: 3em;
-    text-align: center;
-    text-shadow: 0 0 20px #b689f5;
     margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5), 0 0 20px #b689f5, 0 0 30px #d2aaff;
   }
 
   p {
     font-size: 1.3em;
-    text-align: center;
     max-width: 600px;
     margin-bottom: 40px;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0,0,0,0.5);
   }
 
   button {
@@ -79,39 +88,46 @@
 
 <!-- Экран 1 — Вход -->
 <div id="screen1" class="screen show">
-  <h1>Добро пожаловать в Аврору ✨</h1>
-  <p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
-  <button onclick="nextScreen(2)">Начать</button>
+  <div class="text-block">
+    <h1>Добро пожаловать в Аврору ✨</h1>
+    <p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
+    <button onclick="nextScreen(2)">Начать</button>
+  </div>
 </div>
 
 <!-- Экран 2 — Выбор -->
 <div id="screen2" class="screen">
-  <h1>Кем ты хочешь быть?</h1>
-  <button onclick="selectRole('Человек')">Человек</button>
-  <button onclick="selectRole('Свет')">Свет</button>
+  <div class="text-block">
+    <h1>Кем ты хочешь быть?</h1>
+    <button onclick="selectRole('Человек')">Человек</button>
+    <button onclick="selectRole('Свет')">Свет</button>
+  </div>
 </div>
 
 <!-- Экран 3 — Первый вопрос -->
 <div id="screen3" class="screen">
-  <h1 id="roleTitle"></h1>
-  <p>Что сейчас больше всего шумит внутри тебя?</p>
-  <button onclick="nextScreen(4)">Хочу говорить</button>
-  <button onclick="nextScreen(4)">Хочу молчать</button>
+  <div class="text-block">
+    <h1 id="roleTitle"></h1>
+    <p>Что сейчас больше всего шумит внутри тебя?</p>
+    <button onclick="nextScreen(4)">Хочу говорить</button>
+    <button onclick="nextScreen(4)">Хочу молчать</button>
+  </div>
 </div>
 
 <!-- Экран 4 — Финал -->
 <div id="screen4" class="screen">
-  <h1>Ты дома 🌒✨</h1>
-  <p>Здесь можно быть любым. Продолжай исследовать Аврору.</p>
+  <div class="text-block">
+    <h1>Ты дома 🌒✨</h1>
+    <p>Здесь можно быть любым. Продолжай исследовать Аврору.</p>
+  </div>
 </div>
 
 <script>
   let score = 0;
   let role = '';
-  let transitioning = false; // блокируем многократные клики
+  let transitioning = false;
 
   function fadeOut(element, callback) {
-    element.style.transition = 'opacity 0.5s ease';
     element.style.opacity = 0;
     setTimeout(() => {
       element.classList.remove('show');
@@ -121,7 +137,6 @@
 
   function fadeIn(element) {
     element.classList.add('show');
-    element.style.transition = 'opacity 0.5s ease';
     element.style.opacity = 1;
   }
 
@@ -131,7 +146,6 @@
 
     const current = document.querySelector('.screen.show');
     fadeOut(current, () => {
-      // добавляем очки после плавного скрытия
       score += 10;
       document.querySelector('.score').textContent = 'Очки: ' + score;
 
