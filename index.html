@@ -141,9 +141,9 @@
 </div>
 
 <script>
-  let score = parseInt(localStorage.getItem('score')) || 0;
-  let role = localStorage.getItem('role') || '';
-  let history = JSON.parse(localStorage.getItem('history')) || [];
+  let score = 0;
+  let role = '';
+  let history = [];
   let transitioning = false;
 
   const questions = {
@@ -156,8 +156,6 @@
       answers: ['Делиться светом', 'Помогать другим']
     }
   };
-
-  document.querySelector('.score').textContent = 'Очки: ' + score;
 
   function fadeOut(element, callback) {
     element.style.opacity = 0;
@@ -179,10 +177,9 @@
     const current = document.querySelector('.screen.show');
     fadeOut(current, () => {
       if (num === 4) {
+        // В конце начисляем очки
+        score = 20; // максимум 20 для всех
         showCabinet();
-      } else {
-        score += 10;
-        document.querySelector('.score').textContent = 'Очки: ' + score;
       }
       const next = document.getElementById('screen'+num);
       fadeIn(next);
@@ -192,9 +189,7 @@
 
   function selectRole(chosenRole) {
     role = chosenRole;
-    localStorage.setItem('role', role);
     history.push(`Выбрана роль: ${role}`);
-    localStorage.setItem('history', JSON.stringify(history));
 
     document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
 
@@ -214,15 +209,12 @@
   }
 
   function answerSelected(answer) {
-    score += 10;
-    document.querySelector('.score').textContent = 'Очки: ' + score;
     history.push(`Выбор: ${answer}`);
-    localStorage.setItem('history', JSON.stringify(history));
-    localStorage.setItem('score', score);
-    nextScreen(4);
+    nextScreen(4); // начисление очков и переход в кабинет
   }
 
   function showCabinet() {
+    document.querySelector('.score').textContent = 'Очки: ' + score;
     document.getElementById('userRole').textContent = role;
     document.getElementById('userScore').textContent = score;
 
@@ -239,7 +231,6 @@
     score = 0;
     role = '';
     history = [];
-    localStorage.clear();
     document.querySelector('.score').textContent = 'Очки: 0';
     nextScreen(1);
   }
