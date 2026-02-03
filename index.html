@@ -25,10 +25,9 @@
     align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1s ease;
   }
 
-  .screen.active {
+  .screen.show {
     opacity: 1;
     pointer-events: all;
   }
@@ -79,7 +78,7 @@
 <div class="score">Очки: 0</div>
 
 <!-- Экран 1 — Вход -->
-<div id="screen1" class="screen active">
+<div id="screen1" class="screen show">
   <h1>Добро пожаловать в Аврору ✨</h1>
   <p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
   <button onclick="nextScreen(2)">Начать</button>
@@ -100,7 +99,7 @@
   <button onclick="nextScreen(4)">Хочу молчать</button>
 </div>
 
-<!-- Экран 4 — Финал пока визуал -->
+<!-- Экран 4 — Финал -->
 <div id="screen4" class="screen">
   <h1>Ты дома 🌒✨</h1>
   <p>Здесь можно быть любым. Продолжай исследовать Аврору.</p>
@@ -109,14 +108,37 @@
 <script>
   let score = 0;
   let role = '';
+  let transitioning = false; // блокируем многократные клики
+
+  function fadeOut(element, callback) {
+    element.style.transition = 'opacity 0.5s ease';
+    element.style.opacity = 0;
+    setTimeout(() => {
+      element.classList.remove('show');
+      if(callback) callback();
+    }, 500);
+  }
+
+  function fadeIn(element) {
+    element.classList.add('show');
+    element.style.transition = 'opacity 0.5s ease';
+    element.style.opacity = 1;
+  }
 
   function nextScreen(num) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen'+num).classList.add('active');
+    if (transitioning) return;
+    transitioning = true;
 
-    // Простая магия — добавляем очки визуально
-    score += 10;
-    document.querySelector('.score').textContent = 'Очки: ' + score;
+    const current = document.querySelector('.screen.show');
+    fadeOut(current, () => {
+      // добавляем очки после плавного скрытия
+      score += 10;
+      document.querySelector('.score').textContent = 'Очки: ' + score;
+
+      const next = document.getElementById('screen'+num);
+      fadeIn(next);
+      transitioning = false;
+    });
   }
 
   function selectRole(chosenRole) {
