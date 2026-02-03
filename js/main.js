@@ -1,94 +1,88 @@
 // Тема
-function toggleTheme(){
+function toggleTheme() {
   document.body.classList.toggle('light');
   localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
 }
 
 // Подгрузка темы
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('DOMContentLoaded', () => {
   if(localStorage.getItem('theme')==='light') document.body.classList.add('light');
 
-  // Профиль
-  const nickname = document.getElementById('nickname');
-  const hobbies = document.getElementById('hobbies');
-  const music = document.getElementById('music');
-  const about = document.getElementById('about');
-  const avatarInput = document.getElementById('avatar');
-  const avatarPreview = document.getElementById('avatarPreview');
-  const saveBtn = document.getElementById('saveProfileBtn');
-  const userPoints = document.getElementById('userPoints');
+  // Экран выбора роли
+  const roleScreen = document.getElementById('roleScreen');
+  const questionsScreen = document.getElementById('questionsScreen');
+  const choiceBtns = document.querySelectorAll('.choice-btn');
 
-  if(userPoints){
-    userPoints.textContent = localStorage.getItem('userPoints') || 0;
-  }
+  let userRole = null;
+  choiceBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      userRole = btn.dataset.role;
+      localStorage.setItem('userRole', userRole);
 
-  if(nickname){
-    const saved = JSON.parse(localStorage.getItem('profileData') || '{}');
-    if(saved.nickname) nickname.value = saved.nickname;
-    if(saved.hobbies) hobbies.value = saved.hobbies;
-    if(saved.music) music.value = saved.music;
-    if(saved.about) about.value = saved.about;
-    if(saved.avatar) avatarPreview.style.backgroundImage = `url(${saved.avatar})`;
-  }
+      // Плавный переход на экран вопросов
+      roleScreen.classList.remove('show');
+      questionsScreen.classList.add('show');
 
-  // Аватар
-  if(avatarInput){
-    avatarInput.addEventListener('change', (e)=>{
-      const file = e.target.files[0];
-      if(file){
-        const reader = new FileReader();
-        reader.onload = function(evt){
-          avatarPreview.style.backgroundImage = `url(${evt.target.result})`;
-          localStorage.setItem('profileData', JSON.stringify({
-            ...JSON.parse(localStorage.getItem('profileData')||'{}'),
-            avatar: evt.target.result
-          }));
-        }
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-
-  // Сохранение профиля
-  if(saveBtn){
-    saveBtn.addEventListener('click', ()=>{
-      const data = {
-        nickname: nickname.value,
-        hobbies: hobbies.value,
-        music: music.value,
-        about: about.value,
-        avatar: avatarPreview.style.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '')
-      };
-      localStorage.setItem('profileData', JSON.stringify(data));
-      alert('Профиль сохранён! ✨');
-    });
-  }
-
-  // Аккордеон
-  document.querySelectorAll('.accordion-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const content = btn.nextElementSibling;
-      const isOpen = content.style.maxHeight && content.style.maxHeight!=='0px';
-      document.querySelectorAll('.accordion-content').forEach(c=>{c.style.maxHeight=null; c.style.padding='0 20px';});
-      if(!isOpen){content.style.maxHeight = content.scrollHeight+'px'; content.style.padding='10px 20px';}
+      startQuestions();
     });
   });
 
-  // Кнопка правил
-  const acceptRulesBtn = document.getElementById('acceptRulesBtn');
-  if(acceptRulesBtn){
-    acceptRulesBtn.addEventListener('click', ()=>{
-      window.location.href='profile.html';
-    });
+  // Вопросы
+  const questions = [
+    {text: "Что тебя радует в этот момент?", options:["Светлое", "Темное"]},
+    {text: "Что тебя сегодня вдохновляет?", options:["Природа", "Люди"]},
+    {text: "Что тебе хочется сделать прямо сейчас?", options:["Поговорить", "Помолчать"]},
+    {text: "Что приносит тебе радость?", options:["Маленькое", "Большое"]},
+    {text: "Чем ты хочешь поделиться с другими?", options:["История", "Мысль"]}
+  ];
+
+  let currentQuestion = 0;
+  const questionTitle = document.getElementById('questionTitle');
+  const questionText = document.getElementById('questionText');
+  const nextBtn = document.querySelector('.next-btn');
+  const customInput = document.getElementById('customAnswer');
+  const answerBtns = document.querySelectorAll('.answer-btn');
+
+  const userAnswers = [];
+
+  function startQuestions() {
+    showQuestion(currentQuestion);
   }
 
-  // Onboarding кнопки выбора
-  document.querySelectorAll('.choice-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const role = btn.dataset.role;
-      localStorage.setItem('userRole', role);
-      alert(`Вы выбрали: ${role}`);
-      // Тут можно плавный переход на вопросы
+  function showQuestion(index) {
+    const q = questions[index];
+    questionTitle.textContent = `Вопрос ${index + 1}`;
+    questionText.textContent = q.text;
+    answerBtns[0].textContent = q.options[0];
+    answerBtns[1].textContent = q.options[1];
+    customInput.value = "";
+  }
+
+  answerBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      userAnswers.push(btn.textContent);
+      nextQuestion();
     });
   });
+
+  nextBtn.addEventListener('click', () => {
+    if(customInput.value.trim() !== "") {
+      userAnswers.push(customInput.value.trim());
+      nextQuestion();
+    } else {
+      alert("Введите свой вариант ответа или выберите один из вариантов.");
+    }
+  });
+
+  function nextQuestion() {
+    currentQuestion++;
+    if(currentQuestion < questions.length) {
+      showQuestion(currentQuestion);
+    } else {
+      // Все вопросы отвечены, начисляем баллы и идем в профиль
+      localStorage.setItem('userPoints', 5); // одинаково для всех новичков
+      localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+      window.location.href = 'profile.html';
+    }
+  }
 });
