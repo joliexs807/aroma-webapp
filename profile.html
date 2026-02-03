@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Личный кабинет — Аврора</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+  body{margin:0;font-family:'Comfortaa',cursive;background:linear-gradient(135deg,#0d0415,#2a1238);color:#fff;}
+  .container{max-width:900px;margin:auto;padding:30px;}
+  h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;}
+  label{display:block;margin-top:15px;font-weight:bold;}
+  input[type=text]{width:100%;padding:10px;border-radius:10px;border:none;margin-top:5px;}
+  textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:5px;}
+  .avatar-preview{margin-top:10px; width:150px; height:150px; border-radius:50%; object-fit:cover; border:3px solid #b689f5; }
+  .section{margin-bottom:25px;}
+  .history ul{list-style:none;padding:0;}
+  .history li{margin-bottom:8px;background:rgba(255,255,255,0.1);padding:8px;border-radius:10px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Личный кабинет 🌒✨</h1>
+
+  <div class="section">
+    <label>Роль:</label>
+    <input type="text" id="role" disabled/>
+  </div>
+
+  <div class="section">
+    <label>Очки:</label>
+    <input type="text" id="score" disabled value="20"/>
+  </div>
+
+  <div class="section">
+    <label>Ник:</label>
+    <input type="text" id="nickname" placeholder="Придумай ник"/>
+  </div>
+
+  <div class="section">
+    <label>Аватар:</label>
+    <input type="file" id="avatarInput"/>
+    <img id="avatarPreview" class="avatar-preview"/>
+  </div>
+
+  <div class="section">
+    <label>Хобби:</label>
+    <textarea id="hobby" rows="2" placeholder="Напиши свои хобби"></textarea>
+  </div>
+
+  <div class="section">
+    <label>Любимая музыка:</label>
+    <textarea id="music" rows="2" placeholder="Напиши любимые песни или жанры"></textarea>
+  </div>
+
+  <div class="section">
+    <label>Настроение сейчас:</label>
+    <input type="text" id="mood" placeholder="Как ты себя чувствуешь"/>
+  </div>
+
+  <div class="section">
+    <label>Цитата/мантра:</label>
+    <textarea id="quote" rows="2" placeholder="Напиши свою цитату или мантру"></textarea>
+  </div>
+
+  <div class="section history">
+    <label>История действий:</label>
+    <ul id="historyList"></ul>
+  </div>
+</div>
+
+<script>
+const roleInput=document.getElementById('role');
+const historyList=document.getElementById('historyList');
+const avatarInput=document.getElementById('avatarInput');
+const avatarPreview=document.getElementById('avatarPreview');
+
+window.onload=function(){
+  const role=localStorage.getItem('userRole')||'';
+  const history=JSON.parse(localStorage.getItem('history')||'[]');
+  roleInput.value=role;
+  history.forEach(item=>{
+    const li=document.createElement('li');
+    li.textContent=item;
+    historyList.appendChild(li);
+  });
+}
+
+avatarInput.addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){ avatarPreview.src=ev.target.result; }
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+</html>
