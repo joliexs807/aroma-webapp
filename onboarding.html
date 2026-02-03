@@ -36,15 +36,9 @@ body.light {background: var(--bg-light); color: var(--text-light);}
 .container {
   width:100%;
   max-width:700px;
-  background:rgba(0,0,0,0.2);
-  padding:30px 20px;
-  border-radius:20px;
+  padding:20px;
   text-align:center;
-  box-shadow:0 0 40px rgba(0,0,0,0.5);
-  transition:background 0.5s,box-shadow 0.5s;
 }
-
-body.light .container {background:rgba(255,255,255,0.2); box-shadow:0 0 30px rgba(0,0,0,0.2);}
 
 .screen {opacity:0; pointer-events:none; transition:opacity 0.5s;}
 .screen.show {opacity:1; pointer-events:all;}
@@ -53,21 +47,13 @@ h1 {font-size:2.2em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 
 body.light h1 {text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
 
 p {font-size:1.2em; margin-bottom:20px; line-height:1.5;}
+
 button {
-  padding:12px 25px;
-  margin:10px;
   border:none;
   border-radius:30px;
   cursor:pointer;
-  background: var(--button-dark);
-  color:#fff;
-  box-shadow:0 0 20px var(--shadow-dark);
-  transition:0.3s,box-shadow 0.5s,background 0.5s,color 0.5s,transform 0.3s;
+  transition:0.3s, transform 0.3s, box-shadow 0.3s;
 }
-body.light button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
-button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
-
-input[type=text] {padding:8px; border-radius:10px; border:none; margin-top:10px; width:100%; max-width:300px;}
 
 .theme-toggle {
   position:absolute;
@@ -81,18 +67,57 @@ input[type=text] {padding:8px; border-radius:10px; border:none; margin-top:10px;
   color:#fff;
 }
 body.light .theme-toggle {background: var(--button-light); color: var(--text-light);}
+
+/* Кнопки роли Душа/Свет */
+.button-container {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  margin-top:20px;
+}
+
+.role-btn {
+  flex:1 1 200px; /* минимум 200px, растягивается */
+  max-width:300px;
+  padding:20px 0;
+  font-size:1.5em;
+  background: var(--button-dark);
+  color:#fff;
+  box-shadow:0 0 20px var(--shadow-dark);
+}
+.role-btn:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
+body.light .role-btn {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
+
+/* Кнопки ответов */
+#answers button {
+  padding:12px 25px;
+  font-size:1.2em;
+  background: var(--button-dark);
+  color:#fff;
+  box-shadow:0 0 20px var(--shadow-dark);
+  margin:8px;
+}
+#answers button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
+body.light #answers button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
+
+input[type=text] {padding:8px; border-radius:10px; border:none; margin-top:10px; width:100%; max-width:300px;}
 </style>
 </head>
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
 <div class="container">
+  <!-- Экран выбора роли -->
   <div id="screen1" class="screen show">
     <h1>Кем ты хочешь быть?</h1>
-    <button onclick="selectRole('Душа')">Душа</button>
-    <button onclick="selectRole('Свет')">Свет</button>
+    <div class="button-container">
+      <button class="role-btn" onclick="selectRole('Душа')">Душа</button>
+      <button class="role-btn" onclick="selectRole('Свет')">Свет</button>
+    </div>
   </div>
 
+  <!-- Экран вопросов -->
   <div id="screen2" class="screen">
     <h1 id="roleTitle"></h1>
     <p id="questionText"></p>
@@ -103,6 +128,7 @@ body.light .theme-toggle {background: var(--button-light); color: var(--text-lig
     </div>
   </div>
 
+  <!-- Экран завершения -->
   <div id="screen3" class="screen">
     <h1>Поздравляем! ✨</h1>
     <p>Ты завершил свои вопросы. Перейди в личный кабинет.</p>
