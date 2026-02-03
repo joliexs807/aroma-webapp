@@ -6,9 +6,11 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
-<div class="container screen show" id="onboardingScreen">
+<!-- Экран 1: Выбор роли -->
+<div class="container screen show" id="roleScreen">
   <h1>Добро пожаловать в Аврору ✨</h1>
   <p>Здесь каждый может быть собой. Никогда не осуждаем. Ты дома.</p>
 
@@ -18,14 +20,18 @@
   </div>
 </div>
 
+<!-- Экран 2: Вопросы -->
 <div class="container screen" id="questionsScreen">
-  <h2>Вопрос 1</h2>
-  <p>Что тебя радует в этот момент?</p>
+  <h2 id="questionTitle">Вопрос 1</h2>
+  <p id="questionText">Что тебя радует в этот момент?</p>
+  
   <div class="answer-buttons">
-    <button class="answer-btn">Что-то простое</button>
-    <button class="answer-btn">Что-то необычное</button>
+    <button class="answer-btn" data-answer="вариант1">Вариант 1</button>
+    <button class="answer-btn" data-answer="вариант2">Вариант 2</button>
   </div>
-  <input type="text" placeholder="Свой вариант..." class="custom-input" />
+  
+  <input type="text" id="customAnswer" placeholder="Свой вариант..." class="custom-input" />
+
   <button class="next-btn">Следующий вопрос</button>
 </div>
 
