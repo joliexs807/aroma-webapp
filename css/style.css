@@ -1,11 +1,14 @@
 :root {
-  --button-dark: #8a2be2;
-  --button-light: #d8b4ff;
-  --text-light: #333;
-  --shadow-dark: rgba(138,43,226,0.7);
-  --shadow-light: rgba(216,180,255,0.7);
   --bg-dark: #1a1a2e;
   --bg-light: #f7f0ff;
+  --text-dark: #fff;
+  --text-light: #333;
+  --button-dark: #8a2be2;
+  --button-light: #d8b4ff;
+  --shadow-dark: rgba(138,43,226,0.7);
+  --shadow-light: rgba(216,180,255,0.7);
+  --card-bg-dark: rgba(255,255,255,0.05);
+  --card-bg-light: rgba(0,0,0,0.05);
 }
 
 body {
@@ -13,69 +16,110 @@ body {
   margin:0;
   padding:0;
   background: var(--bg-dark);
-  color:#fff;
-  transition: background 0.4s, color 0.4s;
+  color: var(--text-dark);
+  transition: background 0.5s, color 0.5s;
 }
-body.light {background: var(--bg-light); color: var(--text-light);}
+
+body.light {
+  background: var(--bg-light);
+  color: var(--text-light);
+}
 
 .container {
-  max-width:600px;
-  margin:50px auto;
-  padding:20px;
-  text-align:center;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  text-align: center;
+  border-radius: 20px;
+  transition: all 0.4s;
 }
 
-button, .choice-btn, .answer-btn, .next-btn, .custom-file-btn {
+.screen {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.screen.show {
+  display: block;
+  opacity: 1;
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px var(--shadow-dark);
+}
+
+.choice-buttons, .answer-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.choice-btn, .answer-btn, .next-btn, .custom-file-btn, .theme-toggle {
   background: var(--button-dark);
-  color:#fff;
-  border:none;
-  border-radius:30px;
-  padding:12px 25px;
-  font-size:1.1em;
-  cursor:pointer;
-  margin:10px;
-  box-shadow:0 0 20px var(--shadow-dark);
-  transition:0.3s, transform 0.3s, box-shadow 0.3s;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 20px var(--shadow-dark);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
-button:hover, .choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover {
-  transform:scale(1.05);
-  box-shadow:0 0 40px var(--shadow-light);
+
+.choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover, .theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px var(--shadow-light);
 }
-body.light button, body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn {
+
+body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn, body.light .theme-toggle {
   background: var(--button-light);
   color: var(--text-light);
-  box-shadow:0 0 20px var(--shadow-light);
+  box-shadow: 0 0 20px var(--shadow-light);
+}
+
+input, textarea {
+  width: 80%;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 15px;
+  border: none;
+  font-size: 1.1em;
+}
+
+.custom-input {
+  display: block;
+  margin: 20px auto;
 }
 
 .profile-card {
-  margin:15px 0;
-  padding:15px;
-  border-radius:20px;
-  background: rgba(255,255,255,0.05);
-  transition:0.3s, box-shadow 0.3s;
+  margin: 15px 0;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--card-bg-dark);
+  transition: 0.3s, box-shadow 0.3s;
 }
-.profile-card:hover {box-shadow:0 0 30px var(--shadow-light);}
-body.light .profile-card {background: rgba(0,0,0,0.05);}
 
-input, textarea {
-  width:80%;
-  padding:10px;
-  border-radius:15px;
-  border:none;
-  margin:5px 0;
-  font-size:1em;
+.profile-card:hover {
+  box-shadow: 0 0 30px var(--shadow-light);
+}
+
+body.light .profile-card {
+  background: var(--card-bg-light);
 }
 
 .avatar-preview {
-  width:100px;
-  height:100px;
-  margin:10px auto;
-  border-radius:50%;
-  background-size:cover;
-  background-position:center;
+  width: 120px;
+  height: 120px;
+  margin: 15px auto;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
 }
 
-/* Аккордеон */
+/* Аккордеон для правил */
 .accordion-item {margin-bottom:10px; border-radius:15px; overflow:hidden; transition:0.3s;}
 .accordion-btn {width:100%; text-align:left; padding:12px 20px; font-size:1.1em; cursor:pointer; border:none; border-radius:0;}
 .accordion-content {max-height:0; overflow:hidden; background: rgba(0,0,0,0.15); color:#fff; padding:0 20px; transition:max-height 0.4s ease, padding 0.4s ease;}
