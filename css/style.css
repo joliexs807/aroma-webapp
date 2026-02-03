@@ -7,100 +7,44 @@
   --button-light: #d8b4ff;
   --shadow-dark: rgba(138,43,226,0.7);
   --shadow-light: rgba(216,180,255,0.7);
-  --card-bg-dark: rgba(255,255,255,0.05);
-  --card-bg-light: rgba(0,0,0,0.05);
 }
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  margin:0;
-  padding:0;
+  margin:0; padding:0;
   background: var(--bg-dark);
   color: var(--text-dark);
   transition: background 0.5s, color 0.5s;
 }
+body.light { background: var(--bg-light); color: var(--text-light); }
 
-body.light {
-  background: var(--bg-light);
-  color: var(--text-light);
-}
+.container { max-width: 600px; margin:50px auto; padding:30px; text-align:center; border-radius:20px; transition: all 0.4s; }
+.screen { display:none; opacity:0; transition: opacity 0.5s ease; }
+.screen.show { display:block; opacity:1; }
 
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 30px;
-  text-align: center;
-  border-radius: 20px;
-  transition: all 0.4s;
-}
+h1, h2 { margin-bottom:20px; text-shadow:0 0 10px var(--shadow-dark); }
 
-.screen { display: none; opacity: 0; transition: opacity 0.5s ease; }
-.screen.show { display: block; opacity: 1; }
-
-h1, h2 { margin-bottom: 20px; text-shadow: 0 0 10px var(--shadow-dark); }
-
-button, .choice-btn, .answer-btn, .next-btn, .custom-file-btn, .theme-toggle {
+button, .choice-btn, .answer-btn, .next-btn, .theme-toggle {
   background: var(--button-dark);
-  color: #fff;
-  border: none;
-  border-radius: 30px;
-  padding: 15px 30px;
-  font-size: 1.2em;
-  margin: 10px;
-  cursor: pointer;
-  box-shadow: 0 0 20px var(--shadow-dark);
-  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  color: #fff; border: none; border-radius: 30px;
+  padding: 15px 30px; font-size:1.2em; margin: 10px;
+  cursor:pointer; box-shadow:0 0 20px var(--shadow-dark);
+  transition: transform 0.3s, box-shadow 0.3s;
   animation: pulse 2s infinite;
 }
+button:hover { transform: scale(1.05); box-shadow:0 0 40px var(--shadow-light); }
 
-button:hover, .choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover, .theme-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px var(--shadow-light);
-}
+body.light button { background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light); }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 20px var(--shadow-dark);}
-  50% { box-shadow: 0 0 40px var(--shadow-light);}
-  100% { box-shadow: 0 0 20px var(--shadow-dark);}
+  0% { box-shadow:0 0 20px var(--shadow-dark);}
+  50% { box-shadow:0 0 40px var(--shadow-light);}
+  100% { box-shadow:0 0 20px var(--shadow-dark);}
 }
 
-body.light button, body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn, body.light .theme-toggle {
-  background: var(--button-light);
-  color: var(--text-light);
-  box-shadow: 0 0 20px var(--shadow-light);
-}
+.choice-buttons, .answer-buttons { display:flex; flex-direction:column; align-items:center; }
 
-.choice-buttons, .answer-buttons { display: flex; flex-direction: column; align-items: center; }
+input { width:80%; padding:15px; margin:10px auto; border-radius:15px; border:none; font-size:1.2em; display:block; }
 
-input, textarea {
-  width: 80%; padding: 15px; margin: 10px auto; border-radius: 15px; border: none; font-size: 1.2em; display: block;
-}
-
-.profile-card {
-  margin: 15px 0; padding: 20px; border-radius: 20px; background: var(--card-bg-dark);
-  transition: 0.3s, box-shadow 0.3s, transform 0.3s;
-}
-.profile-card:hover { box-shadow: 0 0 40px var(--shadow-light); transform: translateY(-5px); }
-body.light .profile-card { background: var(--card-bg-light); }
-
-.avatar-preview {
-  width: 140px; height: 140px; margin: 10px auto 0 auto; border-radius: 50%;
-  background-size: cover; background-position: center; border: 3px solid var(--button-dark);
-  box-shadow: 0 0 30px var(--shadow-dark); animation: avatarPulse 2s infinite;
-}
-body.light .avatar-preview { border-color: var(--button-light); box-shadow: 0 0 30px var(--shadow-light); }
-@keyframes avatarPulse {
-  0%,100%{ box-shadow:0 0 30px var(--shadow-dark);}
-  50%{ box-shadow:0 0 50px var(--shadow-light);}
-}
-
-/* Аккордеон правил */
-.accordion-item {margin-bottom:10px; border-radius:15px; overflow:hidden; transition:0.3s;}
-.accordion-btn {width:100%; text-align:left; padding:12px 20px; font-size:1.1em; cursor:pointer; border:none; border-radius:0;}
-.accordion-content {max-height:0; overflow:hidden; background: rgba(0,0,0,0.15); color:#fff; padding:0 20px; transition:max-height 0.4s ease, padding 0.4s ease;}
-body.light .accordion-content {background: rgba(255,255,255,0.3); color: var(--text-light);}
-
-.fade-in { opacity: 0; animation: fadeIn 1s forwards; }
+.fade-in { opacity:0; animation: fadeIn 1s forwards; }
 @keyframes fadeIn { to {opacity:1;} }
-
-.profile-points { font-size: 1.3em; margin-bottom: 15px; }
