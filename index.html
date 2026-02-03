@@ -89,6 +89,16 @@
     font-size: 1.5em;
     text-shadow: 0 0 15px #b689f5;
   }
+
+  .history {
+    margin-top: 20px;
+    max-width: 400px;
+    text-align: left;
+  }
+
+  .history li {
+    margin-bottom: 8px;
+  }
 </style>
 </head>
 <body>
@@ -102,7 +112,7 @@
   <button onclick="nextScreen(2)">Начать</button>
 </div>
 
-<!-- Экран 2 — Выбор -->
+<!-- Экран 2 — Выбор роли -->
 <div id="screen2" class="screen">
   <h1>Кем ты хочешь быть?</h1>
   <div class="button-container">
@@ -111,24 +121,29 @@
   </div>
 </div>
 
-<!-- Экран 3 — Первый вопрос -->
+<!-- Экран 3 — Вопросы -->
 <div id="screen3" class="screen">
   <h1 id="roleTitle"></h1>
   <p id="questionText"></p>
-  <div class="button-container" id="answerButtons">
-    <!-- Кнопки будут подставляться динамически -->
-  </div>
+  <div class="button-container" id="answerButtons"></div>
 </div>
 
-<!-- Экран 4 — Финал -->
+<!-- Экран 4 — Личный кабинет -->
 <div id="screen4" class="screen">
-  <h1>Ты дома 🌒✨</h1>
-  <p>Здесь можно быть любым. Продолжай исследовать Аврору.</p>
+  <h1>Твой кабинет 🌒✨</h1>
+  <p>Роль: <span id="userRole"></span></p>
+  <p>Очки: <span id="userScore"></span></p>
+
+  <h2>История действий:</h2>
+  <ul class="history" id="historyList"></ul>
+
+  <button onclick="restart()">Начать заново</button>
 </div>
 
 <script>
-  let score = 0;
-  let role = '';
+  let score = parseInt(localStorage.getItem('score')) || 0;
+  let role = localStorage.getItem('role') || '';
+  let history = JSON.parse(localStorage.getItem('history')) || [];
   let transitioning = false;
 
   const questions = {
@@ -141,6 +156,8 @@
       answers: ['Делиться светом', 'Помогать другим']
     }
   };
+
+  document.querySelector('.score').textContent = 'Очки: ' + score;
 
   function fadeOut(element, callback) {
     element.style.opacity = 0;
@@ -161,9 +178,12 @@
 
     const current = document.querySelector('.screen.show');
     fadeOut(current, () => {
-      score += 10;
-      document.querySelector('.score').textContent = 'Очки: ' + score;
-
+      if (num === 4) {
+        showCabinet();
+      } else {
+        score += 10;
+        document.querySelector('.score').textContent = 'Очки: ' + score;
+      }
       const next = document.getElementById('screen'+num);
       fadeIn(next);
       transitioning = false;
@@ -172,23 +192,56 @@
 
   function selectRole(chosenRole) {
     role = chosenRole;
+    localStorage.setItem('role', role);
+    history.push(`Выбрана роль: ${role}`);
+    localStorage.setItem('history', JSON.stringify(history));
+
     document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
 
-    // Подставляем вопрос и кнопки динамически
     const q = questions[role];
     document.getElementById('questionText').textContent = q.text;
 
     const answerContainer = document.getElementById('answerButtons');
-    answerContainer.innerHTML = ''; // очищаем старые кнопки
-
+    answerContainer.innerHTML = '';
     q.answers.forEach(ans => {
       const btn = document.createElement('button');
       btn.textContent = ans;
-      btn.onclick = () => nextScreen(4);
+      btn.onclick = () => answerSelected(ans);
       answerContainer.appendChild(btn);
     });
 
     nextScreen(3);
+  }
+
+  function answerSelected(answer) {
+    score += 10;
+    document.querySelector('.score').textContent = 'Очки: ' + score;
+    history.push(`Выбор: ${answer}`);
+    localStorage.setItem('history', JSON.stringify(history));
+    localStorage.setItem('score', score);
+    nextScreen(4);
+  }
+
+  function showCabinet() {
+    document.getElementById('userRole').textContent = role;
+    document.getElementById('userScore').textContent = score;
+
+    const historyList = document.getElementById('historyList');
+    historyList.innerHTML = '';
+    history.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      historyList.appendChild(li);
+    });
+  }
+
+  function restart() {
+    score = 0;
+    role = '';
+    history = [];
+    localStorage.clear();
+    document.querySelector('.score').textContent = 'Очки: 0';
+    nextScreen(1);
   }
 </script>
 
