@@ -1,187 +1,82 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
 :root {
-  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
-  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
-  --text-dark: #fff;
-  --text-light: #222;
-  --button-dark: #b689f5;
-  --button-light: #d2aaff;
-  --shadow-dark: #b689f5;
-  --shadow-light: #d2aaff;
+  --button-dark: #8a2be2;
+  --button-light: #d8b4ff;
+  --text-light: #333;
+  --shadow-dark: rgba(138,43,226,0.7);
+  --shadow-light: rgba(216,180,255,0.7);
+  --bg-dark: #1a1a2e;
+  --bg-light: #f7f0ff;
 }
 
-* {box-sizing:border-box;}
 body {
+  font-family: 'Segoe UI', sans-serif;
   margin:0;
-  font-family:'Comfortaa',cursive;
+  padding:0;
   background: var(--bg-dark);
-  color: var(--text-dark);
-  transition: background 0.5s,color 0.5s;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  min-height:100vh;
-  padding:40px 20px;
+  color:#fff;
+  transition: background 0.4s, color 0.4s;
 }
 body.light {background: var(--bg-light); color: var(--text-light);}
 
 .container {
-  width:100%;
-  max-width:700px;
+  max-width:600px;
+  margin:50px auto;
   padding:20px;
   text-align:center;
 }
 
-/* Экран */
-.screen {opacity:0; pointer-events:none; transition:opacity 0.5s;}
-.screen.show {opacity:1; pointer-events:all;}
-
-h1 {font-size:2.5em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark);}
-body.light h1 {text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
-p {font-size:1.2em; margin-bottom:20px; line-height:1.5;}
-
-/* Кнопки */
-button {
+button, .choice-btn, .answer-btn, .next-btn, .custom-file-btn {
+  background: var(--button-dark);
+  color:#fff;
   border:none;
   border-radius:30px;
-  cursor:pointer;
-  transition:0.3s, transform 0.3s, box-shadow 0.3s;
-  font-size:1.3em;
-  padding:15px 25px;
-  min-width:160px;
-  box-shadow:0 0 20px var(--shadow-dark);
-  background: var(--button-dark);
-  color:#fff;
-  margin-top:15px;
-}
-button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
-body.light button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
-
-/* Кнопка темы */
-.theme-toggle {position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:20px;}
-
-/* Панель баллов */
-.profile-points {
-  font-size:1.2em;
-  margin-bottom:25px;
-  text-align:left;
-}
-
-/* Карточки профиля */
-.profile-card {
-  display:flex;
-  align-items:flex-start;
-  gap:15px;
-  background: rgba(0,0,0,0.2);
-  border-radius:20px;
-  padding:15px 20px;
-  margin-bottom:15px;
-  box-shadow:0 0 25px rgba(0,0,0,0.4);
-  transition:0.3s, transform 0.3s;
-}
-.profile-card:hover {transform:translateY(-3px); box-shadow:0 0 35px var(--shadow-light);}
-body.light .profile-card {background: rgba(255,255,255,0.3); box-shadow:0 0 20px var(--shadow-light);}
-
-.card-icon {font-size:2em; margin-top:5px;}
-
-/* Поля ввода и textarea */
-input[type=text], textarea {
-  padding:12px 15px;
-  font-size:1.2em;
-  border-radius:15px;
-  border:none;
-  width:100%;
-  max-width:400px;
-  box-shadow:0 0 15px rgba(0,0,0,0.3);
-  transition:0.3s;
-}
-input[type=text]:focus, textarea:focus {outline:none; box-shadow:0 0 25px var(--shadow-dark);}
-body.light input[type=text]:focus, body.light textarea:focus {box-shadow:0 0 25px var(--shadow-light);}
-textarea {resize:none; min-height:80px;}
-
-/* Аватар */
-.avatar-preview {
-  width:120px; height:120px;
-  border-radius:50%;
-  background-size:cover;
-  background-position:center;
-  margin-top:10px;
-  box-shadow:0 0 25px var(--shadow-dark);
-}
-body.light .avatar-preview {box-shadow:0 0 25px var(--shadow-light);}
-
-/* Кнопка загрузки аватара в стиле остальных кнопок */
-.custom-file-btn {
-  display:inline-block;
-  background: var(--button-dark);
-  color:#fff;
   padding:12px 25px;
-  border-radius:30px;
+  font-size:1.1em;
   cursor:pointer;
-  transition:0.3s, transform 0.3s, box-shadow 0.3s;
-  font-size:1.2em;
+  margin:10px;
   box-shadow:0 0 20px var(--shadow-dark);
+  transition:0.3s, transform 0.3s, box-shadow 0.3s;
 }
-.custom-file-btn:hover {
+button:hover, .choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover {
   transform:scale(1.05);
   box-shadow:0 0 40px var(--shadow-light);
 }
-body.light .custom-file-btn {
+body.light button, body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn {
   background: var(--button-light);
   color: var(--text-light);
   box-shadow:0 0 20px var(--shadow-light);
 }
 
-/* Аккордеон */
-.accordion {
-  margin:20px 0;
-  text-align:left;
+.profile-card {
+  margin:15px 0;
+  padding:15px;
+  border-radius:20px;
+  background: rgba(255,255,255,0.05);
+  transition:0.3s, box-shadow 0.3s;
 }
+.profile-card:hover {box-shadow:0 0 30px var(--shadow-light);}
+body.light .profile-card {background: rgba(0,0,0,0.05);}
 
-.accordion-item {
-  margin-bottom:10px;
+input, textarea {
+  width:80%;
+  padding:10px;
   border-radius:15px;
-  overflow:hidden;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-  transition:0.3s;
-}
-
-.accordion-btn {
-  width:100%;
-  background: var(--button-dark);
-  color:#fff;
-  padding:12px 20px;
-  font-size:1.1em;
   border:none;
-  cursor:pointer;
-  text-align:left;
-  transition:0.3s, transform 0.3s, box-shadow 0.3s;
+  margin:5px 0;
+  font-size:1em;
 }
-.accordion-btn:hover {transform:scale(1.02); box-shadow:0 0 30px var(--shadow-light);}
-body.light .accordion-btn {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
 
-.accordion-content {
-  max-height:0;
-  overflow:hidden;
-  background: rgba(0,0,0,0.15);
-  color:#fff;
-  padding:0 20px;
-  transition:max-height 0.4s ease, padding 0.4s ease;
+.avatar-preview {
+  width:100px;
+  height:100px;
+  margin:10px auto;
+  border-radius:50%;
+  background-size:cover;
+  background-position:center;
 }
+
+/* Аккордеон */
+.accordion-item {margin-bottom:10px; border-radius:15px; overflow:hidden; transition:0.3s;}
+.accordion-btn {width:100%; text-align:left; padding:12px 20px; font-size:1.1em; cursor:pointer; border:none; border-radius:0;}
+.accordion-content {max-height:0; overflow:hidden; background: rgba(0,0,0,0.15); color:#fff; padding:0 20px; transition:max-height 0.4s ease, padding 0.4s ease;}
 body.light .accordion-content {background: rgba(255,255,255,0.3); color: var(--text-light);}
-.accordion-content p {margin:10px 0;}
-
-button#acceptRulesBtn {
-  display:block;
-  margin:30px auto 0;
-  font-size:1.3em;
-  padding:15px 30px;
-  border-radius:30px;
-  background: var(--button-dark);
-  color:#fff;
-  box-shadow:0 0 25px var(--shadow-dark);
-  transition:0.3s, transform 0.3s, box-shadow 0.3s;
-}
-button#acceptRulesBtn:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
-body.light button#acceptRulesBtn {background: var(--button-light); color: var(--text-light); box-shadow:0 0 25px var(--shadow-light);}
