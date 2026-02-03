@@ -2,113 +2,33 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Аврора — старт</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
-:root {
-  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
-  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
-  --text-dark: #fff;
-  --text-light: #222;
-  --button-dark: #b689f5;
-  --button-light: #d2aaff;
-  --shadow-dark: #b689f5;
-  --shadow-light: #d2aaff;
-}
-
-body {
-  margin:0;
-  font-family:'Comfortaa',cursive;
-  background: var(--bg-dark);
-  color: var(--text-dark);
-  transition: background 0.5s,color 0.5s;
-}
-
-body.light {
-  background: var(--bg-light);
-  color: var(--text-light);
-}
-
-.container {
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
-
-h1 {
-  font-size:3em;
-  text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark),0 0 30px var(--shadow-dark);
-  transition:text-shadow 0.5s,color 0.5s;
-}
-
-body.light h1 {
-  text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);
-  color: var(--text-light);
-}
-
-button {
-  padding:15px 30px;
-  font-size:1.2em;
-  border:none;
-  border-radius:30px;
-  cursor:pointer;
-  background: var(--button-dark);
-  color:#fff;
-  box-shadow:0 0 20px var(--shadow-dark);
-  transition:0.3s,box-shadow 0.5s,background 0.5s,color 0.5s;
-}
-
-body.light button {
-  background: var(--button-light);
-  color: var(--text-light);
-  box-shadow:0 0 20px var(--shadow-light);
-}
-
-button:hover {transform:scale(1.05);box-shadow:0 0 40px var(--shadow-light);}
-
-.theme-toggle {
-  position:absolute;
-  top:20px;
-  left:20px;
-  padding:8px 15px;
-  border-radius:20px;
-  border:none;
-  cursor:pointer;
-  background: var(--button-dark);
-  color:#fff;
-}
-
-body.light .theme-toggle {background: var(--button-light); color: var(--text-light);}
-</style>
+<title>Аврора — Добро пожаловать</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
-<div class="container">
-<h1>Добро пожаловать в Аврору ✨</h1>
-<p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
-<button onclick="startOnboarding()">Начать</button>
+
+<div class="container screen show" id="onboardingScreen">
+  <h1>Добро пожаловать в Аврору ✨</h1>
+  <p>Здесь каждый может быть собой. Никогда не осуждаем. Ты дома.</p>
+
+  <div class="choice-buttons">
+    <button class="choice-btn" data-role="dusha">Душа</button>
+    <button class="choice-btn" data-role="svet">Свет</button>
+  </div>
 </div>
 
-<script>
-function toggleTheme(){
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');
-}
+<div class="container screen" id="questionsScreen">
+  <h2>Вопрос 1</h2>
+  <p>Что тебя радует в этот момент?</p>
+  <div class="answer-buttons">
+    <button class="answer-btn">Что-то простое</button>
+    <button class="answer-btn">Что-то необычное</button>
+  </div>
+  <input type="text" placeholder="Свой вариант..." class="custom-input" />
+  <button class="next-btn">Следующий вопрос</button>
+</div>
 
-function startOnboarding(){
-  window.location.href='onboarding.html';
-}
-
-// применяем тему при загрузке
-window.addEventListener('DOMContentLoaded',()=>{
-  const theme=localStorage.getItem('theme')||'dark';
-  if(theme==='light') document.body.classList.add('light');
-});
-</script>
+<script src="js/main.js"></script>
 </body>
 </html>
