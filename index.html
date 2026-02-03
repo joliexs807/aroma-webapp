@@ -2,101 +2,74 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Аврора — интерактив</title>
+<title>Аврора — старт</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
+:root {
+  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
+  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
+  --text-dark: #fff;
+  --text-light: #222;
+  --button-dark: #b689f5;
+  --button-light: #d2aaff;
+  --shadow-dark: #b689f5;
+  --shadow-light: #d2aaff;
+}
+
 body {
-  margin: 0;
-  font-family: 'Comfortaa', cursive;
-  background: linear-gradient(135deg, #0d0415, #2a1238);
-  color: #fff;
-  overflow: hidden;
-  transition: background 0.5s, color 0.5s;
+  margin:0;
+  font-family:'Comfortaa',cursive;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  transition: background 0.5s,color 0.5s;
 }
 
 body.light {
-  background: linear-gradient(135deg, #e0dff5, #fff0f5) !important;
-  color: #222 !important;
+  background: var(--bg-light);
+  color: var(--text-light);
 }
 
-.screen {
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height:100%;
+.container {
+  height:100vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 0.5s ease;
+  text-align:center;
   padding:20px;
-}
-
-.screen.show {
-  opacity:1;
-  pointer-events:all;
 }
 
 h1 {
   font-size:3em;
-  margin-bottom:20px;
-  text-align:center;
-  text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;
-  transition: text-shadow 0.5s;
+  text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark),0 0 30px var(--shadow-dark);
+  transition:text-shadow 0.5s,color 0.5s;
 }
 
 body.light h1 {
-  text-shadow: 0 0 5px #b689f5,0 0 10px #d2aaff !important;
-}
-
-p {
-  font-size:1.3em;
-  max-width:700px;
-  margin-bottom:20px;
-  text-align:center;
-  text-shadow:0 0 5px rgba(0,0,0,0.5),0 0 10px #b689f5,0 0 15px #d2aaff;
-  transition: text-shadow 0.5s;
-}
-
-body.light p {
-  text-shadow:0 0 3px #b689f5,0 0 7px #d2aaff !important;
-}
-
-.button-container {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);
+  color: var(--text-light);
 }
 
 button {
   padding:15px 30px;
-  margin:10px;
   font-size:1.2em;
   border:none;
   border-radius:30px;
   cursor:pointer;
-  background:#b689f5;
+  background: var(--button-dark);
   color:#fff;
-  box-shadow: 0 0 20px #b689f5;
-  transition:0.3s, box-shadow 0.5s;
+  box-shadow:0 0 20px var(--shadow-dark);
+  transition:0.3s,box-shadow 0.5s,background 0.5s,color 0.5s;
 }
 
-button:hover {
-  box-shadow: 0 0 40px #d2aaff;
-  transform: scale(1.05);
+body.light button {
+  background: var(--button-light);
+  color: var(--text-light);
+  box-shadow:0 0 20px var(--shadow-light);
 }
 
-input[type="text"] {
-  padding:10px;
-  margin-top:10px;
-  font-size:1em;
-  border-radius:10px;
-  border:none;
-  width:250px;
-}
+button:hover {transform:scale(1.05);box-shadow:0 0 40px var(--shadow-light);}
 
 .theme-toggle {
   position:absolute;
@@ -106,92 +79,29 @@ input[type="text"] {
   border-radius:20px;
   border:none;
   cursor:pointer;
-  background:#b689f5;
+  background: var(--button-dark);
   color:#fff;
 }
 
-body.light .theme-toggle {
-  background:#d2aaff !important;
-  color:#222 !important;
-}
+body.light .theme-toggle {background: var(--button-light); color: var(--text-light);}
 </style>
 </head>
 <body>
-
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
-
-<!-- Экран 1 — Вход -->
-<div id="screen1" class="screen show">
-  <h1>Добро пожаловать в Аврору ✨</h1>
-  <p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
-  <button onclick="nextScreen(2)">Начать</button>
-</div>
-
-<!-- Экран 2 — Выбор роли -->
-<div id="screen2" class="screen">
-  <h1>Кем ты хочешь быть?</h1>
-  <div class="button-container">
-    <button onclick="selectRole('Душа')">Душа</button>
-    <button onclick="selectRole('Свет')">Свет</button>
-  </div>
-</div>
-
-<!-- Экран 3 — Вопросы -->
-<div id="screen3" class="screen">
-  <h1 id="roleTitle"></h1>
-  <p id="questionText"></p>
-  <div class="button-container" id="answerButtons"></div>
-  <div id="otherInputContainer" style="display:none;">
-    <input type="text" id="otherInput" placeholder="Напиши свой вариант" />
-    <button onclick="submitOther()">Отправить</button>
-  </div>
-</div>
-
-<!-- Экран 4 — Переход к кабинету -->
-<div id="screen4" class="screen">
-  <h1>Поздравляем! ✨</h1>
-  <p>Ты завершил свои вопросы. Теперь можешь перейти в личный кабинет.</p>
-  <div class="button-container">
-    <button onclick="goToProfile()">Перейти в кабинет</button>
-  </div>
+<div class="container">
+<h1>Добро пожаловать в Аврору ✨</h1>
+<p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
+<button onclick="startOnboarding()">Начать</button>
 </div>
 
 <script>
-let role='';
-let history=[];
-let questionIndex=0;
-let currentQuestion=null;
-
-const questions={
-  'Душа': [
-    {text:'Что сейчас больше всего шумит внутри тебя?',answers:['Хочу говорить','Хочу молчать'],allowOther:true},
-    {text:'Что тебя радует в этот момент?',answers:['Семья','Творчество'],allowOther:true},
-    {text:'Кому бы ты хотел довериться?',answers:['Друзьям','Сам себе'],allowOther:false},
-    {text:'Что бы ты хотел изменить прямо сейчас?',answers:['Эмоции','Действия'],allowOther:false},
-    {text:'Чем хочешь поделиться?',answers:['История','Совет'],allowOther:false}
-  ],
-  'Свет': [
-    {text:'Чем хочешь поделиться сегодня?',answers:['Делиться светом','Помогать другим'],allowOther:true},
-    {text:'Что вдохновляет тебя быть светом?',answers:['Добро','Любовь'],allowOther:false},
-    {text:'Как хочешь помогать?',answers:['Советом','Действием'],allowOther:false},
-    {text:'Кому важнее всего помочь?',answers:['Близким','Незнакомым'],allowOther:false},
-    {text:'Что хочешь оставить после себя?',answers:['Свет','Энергию'],allowOther:false}
-  ]
-};
-
-function fadeOut(el,cb){el.style.opacity=0;setTimeout(()=>{el.classList.remove('show');if(cb) cb();},500);}
-function fadeIn(el){el.classList.add('show');el.style.opacity=1;}
-function nextScreen(num){const current=document.querySelector('.screen.show');fadeOut(current,()=>{fadeIn(document.getElementById('screen'+num));});}
-function selectRole(chosenRole){role=chosenRole;history.push(`Выбрана роль: ${role}`);questionIndex=0;showQuestion();nextScreen(3);}
-function showQuestion(){currentQuestion=questions[role][questionIndex];document.getElementById('roleTitle').textContent=`Ты выбрал: ${role}`;document.getElementById('questionText').textContent=currentQuestion.text;const answerContainer=document.getElementById('answerButtons');answerContainer.innerHTML='';currentQuestion.answers.forEach(ans=>{const btn=document.createElement('button');btn.textContent=ans;btn.onclick=()=>answerSelected(ans);answerContainer.appendChild(btn);});document.getElementById('otherInputContainer').style.display=currentQuestion.allowOther?'flex':'none';}
-function answerSelected(answer){history.push(`Вопрос ${questionIndex+1}: ${answer}`);nextQuestion();}
-function submitOther(){const input=document.getElementById('otherInput');if(input.value.trim()==='')return;history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`);input.value='';nextQuestion();}
-function nextQuestion(){questionIndex++;if(questionIndex>=questions[role].length){nextScreen(4);}else{showQuestion();}}
-function goToProfile(){localStorage.setItem('userRole',role);localStorage.setItem('history',JSON.stringify(history));localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');window.location.href='profile.html';}
-
 function toggleTheme(){
   document.body.classList.toggle('light');
   localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');
+}
+
+function startOnboarding(){
+  window.location.href='onboarding.html';
 }
 
 // применяем тему при загрузке
