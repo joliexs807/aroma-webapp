@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Аврора</title>
+<title>Аврора — интерактив</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
@@ -49,7 +49,7 @@
   p {
     font-size: 1.3em;
     max-width: 700px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-align: center;
     color: #fff;
     text-shadow:
@@ -80,6 +80,15 @@
   button:hover {
     box-shadow: 0 0 40px #d2aaff;
     transform: scale(1.05);
+  }
+
+  input[type="text"] {
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1em;
+    border-radius: 10px;
+    border: none;
+    width: 250px;
   }
 
   .score {
@@ -116,7 +125,7 @@
 <div id="screen2" class="screen">
   <h1>Кем ты хочешь быть?</h1>
   <div class="button-container">
-    <button onclick="selectRole('Человек')">Человек</button>
+    <button onclick="selectRole('Душа')">Душа</button>
     <button onclick="selectRole('Свет')">Свет</button>
   </div>
 </div>
@@ -126,6 +135,10 @@
   <h1 id="roleTitle"></h1>
   <p id="questionText"></p>
   <div class="button-container" id="answerButtons"></div>
+  <div id="otherInputContainer" style="display:none;">
+    <input type="text" id="otherInput" placeholder="Напиши свой вариант" />
+    <button onclick="submitOther()">Отправить</button>
+  </div>
 </div>
 
 <!-- Экран 4 — Личный кабинет -->
@@ -141,99 +154,134 @@
 </div>
 
 <script>
-  let score = 0;
-  let role = '';
-  let history = [];
-  let transitioning = false;
+let score = 0;
+let role = '';
+let history = [];
+let transitioning = false;
+let questionIndex = 0;
+let currentQuestion = null;
 
-  const questions = {
-    'Человек': {
-      text: 'Что сейчас больше всего шумит внутри тебя?',
-      answers: ['Хочу говорить', 'Хочу молчать']
-    },
-    'Свет': {
-      text: 'Чем хочешь поделиться сегодня?',
-      answers: ['Делиться светом', 'Помогать другим']
+// Вопросы для каждой роли с возможностью "Другое"
+const questions = {
+  'Душа': [
+    {text: 'Что сейчас больше всего шумит внутри тебя?', answers: ['Хочу говорить', 'Хочу молчать'], allowOther: true},
+    {text: 'Что тебя радует в этот момент?', answers: ['Семья', 'Творчество'], allowOther: true},
+    {text: 'Кому бы ты хотел довериться?', answers: ['Друзьям', 'Сам себе'], allowOther: false},
+    {text: 'Что бы ты хотел изменить прямо сейчас?', answers: ['Эмоции', 'Действия'], allowOther: false},
+    {text: 'Чем хочешь поделиться?', answers: ['История', 'Совет'], allowOther: false}
+  ],
+  'Свет': [
+    {text: 'Чем хочешь поделиться сегодня?', answers: ['Делиться светом', 'Помогать другим'], allowOther: true},
+    {text: 'Что вдохновляет тебя быть светом?', answers: ['Добро', 'Любовь'], allowOther: false},
+    {text: 'Как хочешь помогать?', answers: ['Советом', 'Действием'], allowOther: false},
+    {text: 'Кому важнее всего помочь?', answers: ['Близким', 'Незнакомым'], allowOther: false},
+    {text: 'Что хочешь оставить после себя?', answers: ['Свет', 'Энергию'], allowOther: false}
+  ]
+};
+
+function fadeOut(element, callback) {
+  element.style.opacity = 0;
+  setTimeout(() => {
+    element.classList.remove('show');
+    if(callback) callback();
+  }, 500);
+}
+
+function fadeIn(element) {
+  element.classList.add('show');
+  element.style.opacity = 1;
+}
+
+function nextScreen(num) {
+  if (transitioning) return;
+  transitioning = true;
+
+  const current = document.querySelector('.screen.show');
+  fadeOut(current, () => {
+    if (num === 4) {
+      score = 20; // всем новичкам одинаково
+      showCabinet();
     }
-  };
+    const next = document.getElementById('screen'+num);
+    fadeIn(next);
+    transitioning = false;
+  });
+}
 
-  function fadeOut(element, callback) {
-    element.style.opacity = 0;
-    setTimeout(() => {
-      element.classList.remove('show');
-      if(callback) callback();
-    }, 500);
+function selectRole(chosenRole) {
+  role = chosenRole;
+  history.push(`Выбрана роль: ${role}`);
+  questionIndex = 0;
+  showQuestion();
+  nextScreen(3);
+}
+
+function showQuestion() {
+  currentQuestion = questions[role][questionIndex];
+  document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
+  document.getElementById('questionText').textContent = currentQuestion.text;
+
+  const answerContainer = document.getElementById('answerButtons');
+  answerContainer.innerHTML = '';
+  currentQuestion.answers.forEach(ans => {
+    const btn = document.createElement('button');
+    btn.textContent = ans;
+    btn.onclick = () => answerSelected(ans);
+    answerContainer.appendChild(btn);
+  });
+
+  const otherContainer = document.getElementById('otherInputContainer');
+  if (currentQuestion.allowOther) {
+    otherContainer.style.display = 'flex';
+  } else {
+    otherContainer.style.display = 'none';
   }
+}
 
-  function fadeIn(element) {
-    element.classList.add('show');
-    element.style.opacity = 1;
+function answerSelected(answer) {
+  history.push(`Вопрос ${questionIndex+1}: ${answer}`);
+  nextQuestion();
+}
+
+function submitOther() {
+  const input = document.getElementById('otherInput');
+  if(input.value.trim() === '') return;
+  history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`);
+  input.value = '';
+  nextQuestion();
+}
+
+function nextQuestion() {
+  questionIndex++;
+  if(questionIndex >= questions[role].length) {
+    nextScreen(4);
+  } else {
+    showQuestion();
   }
+}
 
-  function nextScreen(num) {
-    if (transitioning) return;
-    transitioning = true;
+function showCabinet() {
+  document.querySelector('.score').textContent = 'Очки: ' + score;
+  document.getElementById('userRole').textContent = role;
+  document.getElementById('userScore').textContent = score;
 
-    const current = document.querySelector('.screen.show');
-    fadeOut(current, () => {
-      if (num === 4) {
-        // В конце начисляем очки
-        score = 20; // максимум 20 для всех
-        showCabinet();
-      }
-      const next = document.getElementById('screen'+num);
-      fadeIn(next);
-      transitioning = false;
-    });
-  }
+  const historyList = document.getElementById('historyList');
+  historyList.innerHTML = '';
+  history.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    historyList.appendChild(li);
+  });
+}
 
-  function selectRole(chosenRole) {
-    role = chosenRole;
-    history.push(`Выбрана роль: ${role}`);
-
-    document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
-
-    const q = questions[role];
-    document.getElementById('questionText').textContent = q.text;
-
-    const answerContainer = document.getElementById('answerButtons');
-    answerContainer.innerHTML = '';
-    q.answers.forEach(ans => {
-      const btn = document.createElement('button');
-      btn.textContent = ans;
-      btn.onclick = () => answerSelected(ans);
-      answerContainer.appendChild(btn);
-    });
-
-    nextScreen(3);
-  }
-
-  function answerSelected(answer) {
-    history.push(`Выбор: ${answer}`);
-    nextScreen(4); // начисление очков и переход в кабинет
-  }
-
-  function showCabinet() {
-    document.querySelector('.score').textContent = 'Очки: ' + score;
-    document.getElementById('userRole').textContent = role;
-    document.getElementById('userScore').textContent = score;
-
-    const historyList = document.getElementById('historyList');
-    historyList.innerHTML = '';
-    history.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = item;
-      historyList.appendChild(li);
-    });
-  }
-
-  function restart() {
-    score = 0;
-    role = '';
-    history = [];
-    document.querySelector('.score').textContent = 'Очки: 0';
-    nextScreen(1);
-  }
+function restart() {
+  score = 0;
+  role = '';
+  history = [];
+  questionIndex = 0;
+  document.querySelector('.score').textContent = 'Очки: 0';
+  nextScreen(1);
+}
 </script>
 
 </body>
