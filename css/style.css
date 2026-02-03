@@ -30,73 +30,58 @@ h1, h2 { margin-bottom:20px; text-shadow:0 0 10px var(--shadow-dark); }
 
 .theme-toggle { position: fixed; top: 20px; right: 20px; }
 
-/* Карточки и секции */
-.profile-section { margin-bottom: 25px; padding:20px; border-radius:20px; background: var(--card-bg-dark); box-shadow:0 0 20px var(--shadow-dark); transition:0.3s;}
+/* === Общий стиль кнопок на сайте === */
+button, .choice-btn, .answer-btn, .next-btn, .custom-file-btn {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.2em;
+  padding: 15px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  box-shadow: 0 0 20px var(--shadow-dark);
+  background: var(--button-dark);
+  color: #fff;
+}
+
+button:hover, .choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px var(--shadow-light);
+}
+
+body.light button, body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn {
+  background: var(--button-light);
+  color: var(--text-light);
+  box-shadow: 0 0 20px var(--shadow-light);
+}
+
+/* Onboarding */
+.choice-buttons { display:flex; justify-content:center; gap:30px; margin:20px 0; }
+.choice-btn, .answer-btn { width:180px; height:60px; font-size:1.3em; padding:0; text-align:center; }
+.next-btn, .choice-btn, .answer-btn { animation: pulse 2s infinite; }
+@keyframes pulse {0%{box-shadow:0 0 25px var(--shadow-dark);}50%{box-shadow:0 0 50px var(--shadow-light);}100%{box-shadow:0 0 25px var(--shadow-dark);}}
+
+.custom-input input { width:90%; padding:12px; border-radius:15px; border:none; margin-top:15px; }
+
+/* Профиль */
+.profile-section { margin-bottom:25px; padding:20px; border-radius:20px; background: var(--card-bg-dark); box-shadow:0 0 20px var(--shadow-dark); transition:0.3s;}
 .profile-section:hover { box-shadow:0 0 40px var(--shadow-light); transform: translateY(-3px); }
 body.light .profile-section { background: var(--card-bg-light); box-shadow:0 0 20px var(--shadow-light); }
 
-/* Аватар */
 .avatar-preview {
   width: 140px; height: 140px;
   border-radius: 50%;
-  margin: 10px auto;
+  margin: 20px auto;
   background-size: cover; background-position: center;
   border: 3px solid var(--button-dark);
   box-shadow: 0 0 30px var(--shadow-dark);
   animation: avatarPulse 2s infinite;
 }
 body.light .avatar-preview { border-color: var(--button-light); box-shadow: 0 0 30px var(--shadow-light); }
-@keyframes avatarPulse {0%,100%{ box-shadow:0 0 30px var(--shadow-dark);} 50%{ box-shadow:0 0 50px var(--shadow-light);}}
+@keyframes avatarPulse {0%,100%{ box-shadow:0 0 30px var(--shadow-dark);}50%{ box-shadow:0 0 50px var(--shadow-light);}}
 
-.custom-file-btn {
-  display:inline-block;
-  margin-top:15px;
-  padding:12px 25px;
-  border-radius:30px;
-  background: var(--button-dark);
-  color:#fff;
-  cursor:pointer;
-  box-shadow:0 0 20px var(--shadow-dark);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.custom-file-btn:hover { transform: scale(1.05); box-shadow:0 0 40px var(--shadow-light); }
-body.light .custom-file-btn { background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light); }
-
-/* Inputs и textarea */
-input, textarea {
-  width: 90%;
-  padding:15px;
-  margin:10px auto;
-  border-radius:15px;
-  border:none;
-  font-size:1.1em;
-  display:block;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  transition:0.3s;
-}
+input, textarea { width:90%; padding:15px; margin:10px auto; border-radius:15px; border:none; font-size:1.1em; display:block; background: rgba(255,255,255,0.1); color:#fff; transition:0.3s; }
 input:focus, textarea:focus { outline:none; box-shadow:0 0 15px var(--button-dark); }
 body.light input, body.light textarea { background: rgba(0,0,0,0.05); color: var(--text-light); }
 
-/* Кнопка сохранить */
-.next-btn {
-  background: var(--button-dark);
-  color:#fff;
-  border:none;
-  border-radius:30px;
-  padding:15px 30px;
-  font-size:1.2em;
-  cursor:pointer;
-  margin-top:15px;
-  box-shadow:0 0 25px var(--shadow-dark);
-  animation: pulse 2s infinite;
-}
-.next-btn:hover { transform: scale(1.05); box-shadow:0 0 50px var(--shadow-light); }
-body.light .next-btn { background: var(--button-light); color: var(--text-light); box-shadow:0 0 25px var(--shadow-light); }
-
 .save-message { margin-top:10px; color:#8a2be2; font-weight:bold; font-size:1.1em; text-shadow:0 0 10px #fff; }
-
-/* Анимации */
-@keyframes pulse {0%{box-shadow:0 0 25px var(--shadow-dark);}50%{box-shadow:0 0 50px var(--shadow-light);}100%{box-shadow:0 0 25px var(--shadow-dark);}}
-.fade-in { opacity:0; animation: fadeIn 1s forwards; }
-@keyframes fadeIn { to {opacity:1;} }
