@@ -1,86 +1,101 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>Аврора — Личный кабинет</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-<button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
-<div class="container profile-container screen show">
-
-  <h1>Личный кабинет ✨</h1>
-  <p>Роль: <span id="profileRole"></span></p>
-
-  <!-- Никнейм -->
-  <div class="profile-card">
-    <label for="nickname">Никнейм</label>
-    <input type="text" id="nickname" placeholder="Твой ник">
-  </div>
-
-  <!-- Аватар -->
-  <div class="profile-card">
-    <label for="avatar">Аватар</label>
-    <input type="file" id="avatar" accept="image/*">
-    <div id="avatarPreview" class="avatar-preview"></div>
-  </div>
-
-  <!-- Хобби -->
-  <div class="profile-card">
-    <label for="hobbies">Хобби</label>
-    <textarea id="hobbies" placeholder="Например: рисование, музыка..."></textarea>
-  </div>
-
-  <!-- Любимая музыка -->
-  <div class="profile-card">
-    <label for="music">Любимая музыка</label>
-    <textarea id="music" placeholder="Например: поп, рок, джаз..."></textarea>
-  </div>
-
-  <!-- О себе -->
-  <div class="profile-card">
-    <label for="about">О себе</label>
-    <textarea id="about" placeholder="Расскажи немного о себе..."></textarea>
-  </div>
-
-  <!-- Цитата дня -->
-  <div class="profile-card">
-    <label for="quote">Цитата дня</label>
-    <input type="text" id="quote" placeholder="Вдохновляющая цитата">
-  </div>
-
-  <!-- Сохранить -->
-  <div class="profile-card" style="text-align:center;">
-    <button onclick="saveProfile()">Сохранить</button>
-  </div>
-
-</div>
-
-<script src="js/main.js"></script>
-<script>
-window.addEventListener('DOMContentLoaded',()=>{
-  // Вставляем роль
-  document.getElementById('profileRole').textContent = localStorage.getItem('userRole') || '';
-
-  // Предпросмотр аватара
-  const avatarInput = document.getElementById('avatar');
-  const avatarPreview = document.getElementById('avatarPreview');
-  avatarInput.addEventListener('change', (e)=>{
-    const file = e.target.files[0];
-    if(file){
-      const reader = new FileReader();
-      reader.onload = function(evt){
-        avatarPreview.style.backgroundImage = `url(${evt.target.result})`;
-      }
-      reader.readAsDataURL(file);
-    }
-  });
-});
-
-function saveProfile(){
-  alert('Профиль сохранен ✨');
+:root {
+  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
+  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
+  --text-dark: #fff;
+  --text-light: #222;
+  --button-dark: #b689f5;
+  --button-light: #d2aaff;
+  --shadow-dark: #b689f5;
+  --shadow-light: #d2aaff;
 }
-</script>
-</body>
-</html>
+
+* {box-sizing:border-box;}
+body {
+  margin:0;
+  font-family:'Comfortaa',cursive;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  transition: background 0.5s,color 0.5s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
+
+body.light {background: var(--bg-light); color: var(--text-light);}
+
+.container {
+  width:100%;
+  max-width:700px;
+  padding:20px;
+  text-align:center;
+}
+
+.screen {opacity:0; pointer-events:none; transition:opacity 0.5s;}
+.screen.show {opacity:1; pointer-events:all;}
+
+h1 {font-size:2.2em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark);}
+body.light h1 {text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
+
+p {font-size:1.2em; margin-bottom:20px; line-height:1.5;}
+
+button {
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s, transform 0.3s, box-shadow 0.3s;
+  font-size:1.3em;
+  padding:15px 25px;
+  min-width:160px;
+  box-shadow:0 0 20px var(--shadow-dark);
+  background: var(--button-dark);
+  color:#fff;
+}
+button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
+body.light button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
+
+/* Тема кнопки смены темы */
+.theme-toggle {position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:20px;}
+
+/* Кнопки выбора роли */
+.button-container {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  margin-top:20px;
+}
+
+.role-btn {
+  flex:1 1 200px;
+  max-width:300px;
+  font-size:1.5em;
+  padding:20px 0;
+}
+
+/* Кнопки ответов на вопросы */
+#answers button {
+  padding:15px 30px;
+  font-size:1.3em;
+  margin:10px;
+}
+
+/* Поля ввода и textarea */
+input[type=text], textarea {
+  padding:12px 15px;
+  font-size:1.2em;
+  border-radius:15px;
+  border:none;
+  margin-top:10px;
+  width:100%;
+  max-width:350px;
+  box-shadow:0 0 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+input[type=text]:focus, textarea:focus {outline:none; box-shadow:0 0 25px var(--shadow-dark);}
+body.light input[type=text]:focus, body.light textarea:focus {box-shadow:0 0 25px var(--shadow-light);}
+
+textarea {resize:none; min-height:80px;}
