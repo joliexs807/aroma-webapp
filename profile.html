@@ -10,20 +10,19 @@
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
 <div class="container screen show" id="profileScreen">
-  <h1>Личный кабинет ✨</h1>
+  <h1>Личный кабинет</h1>
+
   <div class="profile-points">
     Баллы: <strong id="userPoints">0</strong> / 20
   </div>
 
   <!-- Ник -->
   <div class="profile-card">
-    <div class="card-icon">📝</div>
     <input type="text" id="nickname" placeholder="Твой ник"/>
   </div>
 
   <!-- Аватар -->
   <div class="profile-card">
-    <div class="card-icon">👤</div>
     <label for="avatar" class="custom-file-btn">Выбрать аватар</label>
     <input type="file" id="avatar" accept="image/*" style="display:none;"/>
     <div id="avatarPreview" class="avatar-preview"></div>
@@ -31,19 +30,16 @@
 
   <!-- Хобби -->
   <div class="profile-card">
-    <div class="card-icon">🎨</div>
     <textarea id="hobbies" placeholder="Твои хобби"></textarea>
   </div>
 
   <!-- Любимая музыка -->
   <div class="profile-card">
-    <div class="card-icon">🎵</div>
     <textarea id="music" placeholder="Любимая музыка"></textarea>
   </div>
 
   <!-- Про себя -->
   <div class="profile-card">
-    <div class="card-icon">💫</div>
     <textarea id="about" placeholder="О себе"></textarea>
   </div>
 
