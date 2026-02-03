@@ -9,11 +9,13 @@
 
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
+<!-- Экран приветствия -->
 <div class="container screen show" id="welcomeScreen">
   <h1 class="fade-in">Добро пожаловать в Аврору ✨</h1>
   <button class="next-btn fade-in" onclick="nextScreen('roleScreen')">Начать</button>
 </div>
 
+<!-- Экран выбора роли -->
 <div class="container screen" id="roleScreen">
   <h2>Кем вы хотите быть?</h2>
   <div class="choice-buttons">
@@ -22,18 +24,20 @@
   </div>
 </div>
 
+<!-- Экран вопросов -->
 <div class="container screen" id="questionsScreen">
-  <h2>Вопрос 1 из 5</h2>
-  <p>Что тебя радует в этот момент?</p>
+  <h2 id="questionNumber">Вопрос 1 из 5</h2>
+  <p id="questionText">Что тебя радует в этот момент?</p>
   <div class="answer-buttons">
-    <button class="answer-btn" onclick="nextQuestion()">Хочу поговорить</button>
-    <button class="answer-btn" onclick="nextQuestion()">Хочу молчать</button>
+    <button class="answer-btn" onclick="submitAnswer('Вариант 1')">Хочу поговорить</button>
+    <button class="answer-btn" onclick="submitAnswer('Вариант 2')">Хочу молчать</button>
   </div>
   <div class="custom-input">
     <input type="text" id="customAnswer" placeholder="Или напишите свой вариант">
   </div>
 </div>
 
+<!-- Экран конца регистрации -->
 <div class="container screen" id="endScreen">
   <h2>Регистрация завершена!</h2>
   <p>Баллы начислены: <span id="finalPoints">5</span> / 20</p>
