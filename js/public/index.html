@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Аврора — Onboarding</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
+
+<!-- Экран приветствия -->
+<div class="container screen show" id="welcomeScreen">
+  <h1>Добро пожаловать в Аврору ✨</h1>
+  <button class="next-btn" onclick="nextScreen('roleScreen')">Начать</button>
+</div>
+
+<!-- Экран выбора роли -->
+<div class="container screen" id="roleScreen">
+  <h2>Кем вы хотите быть?</h2>
+  <div class="choice-buttons">
+    <button class="choice-btn" onclick="selectRole('Душа')">Душа</button>
+    <button class="choice-btn" onclick="selectRole('Свет')">Свет</button>
+  </div>
+</div>
+
+<!-- Экран вопросов -->
+<div class="container screen" id="questionsScreen">
+  <h2 id="questionNumber">Вопрос 1 из 5</h2>
+  <p id="questionText"></p>
+
+  <div class="answer-buttons">
+    <button class="answer-btn" id="option1" onclick="submitAnswer(this.innerText)"></button>
+    <button class="answer-btn" id="option2" onclick="submitAnswer(this.innerText)"></button>
+  </div>
+
+  <div class="custom-input">
+    <input type="text" id="customAnswer" placeholder="Или напишите свой вариант">
+    <button class="next-btn" onclick="submitCustomAnswer()">Отправить</button>
+  </div>
+</div>
+
+<!-- Экран конца регистрации -->
+<div class="container screen" id="endScreen">
+  <h2>Регистрация завершена!</h2>
+  <p>Баллы начислены: <span id="finalPoints">5</span> / 20</p>
+  <button class="next-btn" onclick="goToProfile()">Перейти в личный кабинет</button>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
