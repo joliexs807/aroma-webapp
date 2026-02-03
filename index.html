@@ -27,10 +27,10 @@
 <!-- Экран вопросов -->
 <div class="container screen" id="questionsScreen">
   <h2 id="questionNumber">Вопрос 1 из 5</h2>
-  <p id="questionText">Что тебя радует в этот момент?</p>
+  <p id="questionText"></p>
   <div class="answer-buttons">
-    <button class="answer-btn" onclick="submitAnswer('Вариант 1')">Хочу поговорить</button>
-    <button class="answer-btn" onclick="submitAnswer('Вариант 2')">Хочу молчать</button>
+    <button class="answer-btn" id="option1" onclick="submitAnswer(this.innerText)"></button>
+    <button class="answer-btn" id="option2" onclick="submitAnswer(this.innerText)"></button>
   </div>
   <div class="custom-input">
     <input type="text" id="customAnswer" placeholder="Или напишите свой вариант">
