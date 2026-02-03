@@ -9,30 +9,56 @@
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
 <div class="container screen show">
-  <h1>Личный кабинет ✨</h1>
-  <p>Роль: <span id="profileRole"></span></p>
 
-  <div style="margin-top:15px;">
+  <h1>Личный кабинет ✨</h1>
+
+  <!-- Панель баллов -->
+  <div class="profile-points">
+    <span>Баллы: <strong id="userPoints">0</strong> / 20</span>
+  </div>
+
+  <!-- Карточка Ник -->
+  <div class="profile-card">
+    <div class="card-icon">📝</div>
     <input type="text" id="nickname" placeholder="Твой ник"/>
   </div>
-  <div style="margin-top:15px;">
-    <label for="avatar">Загрузить аватар:</label><br>
+
+  <!-- Карточка Аватар -->
+  <div class="profile-card">
+    <div class="card-icon">👤</div>
     <input type="file" id="avatar" accept="image/*"/>
     <div id="avatarPreview" class="avatar-preview"></div>
   </div>
-  <div style="margin-top:15px;">
-    <textarea id="hobbies" placeholder="Хобби"></textarea>
+
+  <!-- Карточка Хобби -->
+  <div class="profile-card">
+    <div class="card-icon">🎨</div>
+    <textarea id="hobbies" placeholder="Твои хобби"></textarea>
   </div>
-  <div style="margin-top:15px;">
+
+  <!-- Карточка Любимая музыка -->
+  <div class="profile-card">
+    <div class="card-icon">🎵</div>
     <textarea id="music" placeholder="Любимая музыка"></textarea>
   </div>
+
+  <!-- Карточка О себе -->
+  <div class="profile-card">
+    <div class="card-icon">💫</div>
+    <textarea id="about" placeholder="О себе"></textarea>
+  </div>
+
+  <!-- Кнопка Сохранить -->
+  <button id="saveProfileBtn">Сохранить профиль</button>
 
 </div>
 
 <script src="js/main.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('profileRole').textContent = localStorage.getItem('userRole') || '';
+  // Роль из onboarding
+  document.getElementById('userPoints').textContent = localStorage.getItem('userPoints') || 0;
+
   const avatarInput = document.getElementById('avatar');
   const avatarPreview = document.getElementById('avatarPreview');
   avatarInput.addEventListener('change', (e)=>{
@@ -44,6 +70,18 @@ window.addEventListener('DOMContentLoaded',()=>{
       }
       reader.readAsDataURL(file);
     }
+  });
+
+  // Сохранение профиля
+  document.getElementById('saveProfileBtn').addEventListener('click',()=>{
+    const data = {
+      nickname: document.getElementById('nickname').value,
+      hobbies: document.getElementById('hobbies').value,
+      music: document.getElementById('music').value,
+      about: document.getElementById('about').value
+    };
+    localStorage.setItem('profileData', JSON.stringify(data));
+    alert('Профиль сохранён! ✨');
   });
 });
 </script>
