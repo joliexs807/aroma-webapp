@@ -9,7 +9,7 @@
   body {
     margin: 0;
     font-family: 'Comfortaa', cursive;
-    background: linear-gradient(135deg, #0d0415, #2a1238); /* затемнённый градиент */
+    background: linear-gradient(135deg, #0d0415, #2a1238);
     color: #fff;
     overflow: hidden;
   }
@@ -58,6 +58,12 @@
       0 0 15px #d2aaff;
   }
 
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   button {
     padding: 15px 30px;
     margin: 10px;
@@ -99,16 +105,19 @@
 <!-- Экран 2 — Выбор -->
 <div id="screen2" class="screen">
   <h1>Кем ты хочешь быть?</h1>
-  <button onclick="selectRole('Человек')">Человек</button>
-  <button onclick="selectRole('Свет')">Свет</button>
+  <div class="button-container">
+    <button onclick="selectRole('Человек')">Человек</button>
+    <button onclick="selectRole('Свет')">Свет</button>
+  </div>
 </div>
 
 <!-- Экран 3 — Первый вопрос -->
 <div id="screen3" class="screen">
   <h1 id="roleTitle"></h1>
-  <p>Что сейчас больше всего шумит внутри тебя?</p>
-  <button onclick="nextScreen(4)">Хочу говорить</button>
-  <button onclick="nextScreen(4)">Хочу молчать</button>
+  <p id="questionText"></p>
+  <div class="button-container" id="answerButtons">
+    <!-- Кнопки будут подставляться динамически -->
+  </div>
 </div>
 
 <!-- Экран 4 — Финал -->
@@ -121,6 +130,17 @@
   let score = 0;
   let role = '';
   let transitioning = false;
+
+  const questions = {
+    'Человек': {
+      text: 'Что сейчас больше всего шумит внутри тебя?',
+      answers: ['Хочу говорить', 'Хочу молчать']
+    },
+    'Свет': {
+      text: 'Чем хочешь поделиться сегодня?',
+      answers: ['Делиться светом', 'Помогать другим']
+    }
+  };
 
   function fadeOut(element, callback) {
     element.style.opacity = 0;
@@ -153,6 +173,21 @@
   function selectRole(chosenRole) {
     role = chosenRole;
     document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
+
+    // Подставляем вопрос и кнопки динамически
+    const q = questions[role];
+    document.getElementById('questionText').textContent = q.text;
+
+    const answerContainer = document.getElementById('answerButtons');
+    answerContainer.innerHTML = ''; // очищаем старые кнопки
+
+    q.answers.forEach(ans => {
+      const btn = document.createElement('button');
+      btn.textContent = ans;
+      btn.onclick = () => nextScreen(4);
+      answerContainer.appendChild(btn);
+    });
+
     nextScreen(3);
   }
 </script>
