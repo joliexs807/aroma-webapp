@@ -20,9 +20,9 @@ body {
   transition: background 0.5s,color 0.5s;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
   min-height:100vh;
-  padding:20px;
+  padding:40px 20px;
 }
 body.light {background: var(--bg-light); color: var(--text-light);}
 
@@ -33,28 +33,13 @@ body.light {background: var(--bg-light); color: var(--text-light);}
   text-align:center;
 }
 
+/* Экран */
 .screen {opacity:0; pointer-events:none; transition:opacity 0.5s;}
 .screen.show {opacity:1; pointer-events:all;}
 
-h1 {font-size:2.2em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark);}
+h1 {font-size:2.5em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark);}
 body.light h1 {text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
 p {font-size:1.2em; margin-bottom:20px; line-height:1.5;}
-
-/* Прогресс бар */
-#progressContainer {
-  width:100%;
-  height:10px;
-  background: rgba(255,255,255,0.2);
-  border-radius:5px;
-  margin-bottom:20px;
-  overflow:hidden;
-}
-#progressBar {
-  height:100%;
-  width:0%;
-  background: var(--button-dark);
-  transition: width 0.5s ease;
-}
 
 /* Кнопки */
 button {
@@ -68,37 +53,37 @@ button {
   box-shadow:0 0 20px var(--shadow-dark);
   background: var(--button-dark);
   color:#fff;
+  margin-top:15px;
 }
 button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
 body.light button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
 
-/* Тема кнопки */
+/* Кнопка темы */
 .theme-toggle {position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:20px;}
 
-/* Кнопки выбора роли */
-.button-container {
+/* Панель баллов */
+.profile-points {
+  font-size:1.2em;
+  margin-bottom:25px;
+  text-align:left;
+}
+
+/* Карточки профиля */
+.profile-card {
   display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:20px;
-  margin-top:20px;
+  align-items:flex-start;
+  gap:15px;
+  background: rgba(0,0,0,0.2);
+  border-radius:20px;
+  padding:15px 20px;
+  margin-bottom:15px;
+  box-shadow:0 0 25px rgba(0,0,0,0.4);
+  transition:0.3s, transform 0.3s;
 }
+.profile-card:hover {transform:translateY(-3px); box-shadow:0 0 35px var(--shadow-light);}
+body.light .profile-card {background: rgba(255,255,255,0.3); box-shadow:0 0 20px var(--shadow-light);}
 
-.role-btn {
-  flex:1 1 200px;
-  max-width:300px;
-  font-size:1.5em;
-  padding:20px 0;
-}
-
-/* Кнопки ответов на вопросы */
-#answers button {
-  padding:15px 30px;
-  font-size:1.3em;
-  margin:10px;
-  transition:0.3s;
-}
-#answers button.selected {box-shadow:0 0 40px var(--shadow-light); transform:scale(1.05);}
+.card-icon {font-size:2em; margin-top:5px;}
 
 /* Поля ввода и textarea */
 input[type=text], textarea {
@@ -106,9 +91,8 @@ input[type=text], textarea {
   font-size:1.2em;
   border-radius:15px;
   border:none;
-  margin-top:10px;
   width:100%;
-  max-width:350px;
+  max-width:400px;
   box-shadow:0 0 15px rgba(0,0,0,0.3);
   transition:0.3s;
 }
@@ -116,16 +100,13 @@ input[type=text]:focus, textarea:focus {outline:none; box-shadow:0 0 25px var(--
 body.light input[type=text]:focus, body.light textarea:focus {box-shadow:0 0 25px var(--shadow-light);}
 textarea {resize:none; min-height:80px;}
 
-/* Эмодзи */
-.emoji-container {font-size:1.5em; margin-bottom:10px;}
-
 /* Аватар */
 .avatar-preview {
   width:120px; height:120px;
   border-radius:50%;
   background-size:cover;
   background-position:center;
-  margin:10px auto 0;
-  box-shadow:0 0 20px var(--shadow-dark);
+  margin-top:10px;
+  box-shadow:0 0 25px var(--shadow-dark);
 }
-body.light .avatar-preview {box-shadow:0 0 20px var(--shadow-light);}
+body.light .avatar-preview {box-shadow:0 0 25px var(--shadow-light);}
