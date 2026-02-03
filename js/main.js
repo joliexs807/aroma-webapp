@@ -43,7 +43,6 @@ function loadQuestion(){
 // === Отправка ответа (варианты кнопок) ===
 function submitAnswer(answer){
   const custom = document.getElementById('customAnswer').value.trim();
-  // если есть свой ответ, берем его вместо выбранного
   const finalAnswer = custom || answer;
   console.log(`Ответ на вопрос ${currentQuestionIndex+1}:`, finalAnswer);
 
