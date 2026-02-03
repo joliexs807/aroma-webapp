@@ -14,6 +14,7 @@ const questions = [
 
 let currentQuestionIndex = 0;
 
+// === Функции для экранов ===
 function showScreen(id){
   if(currentScreen) currentScreen.classList.remove('show');
   currentScreen = document.getElementById(id);
@@ -22,12 +23,14 @@ function showScreen(id){
 
 function nextScreen(id){ showScreen(id); }
 
+// === Выбор роли ===
 function selectRole(selectedRole){
   role = selectedRole;
   nextScreen('questionsScreen');
   loadQuestion();
 }
 
+// === Загрузка вопроса ===
 function loadQuestion(){
   const question = questions[currentQuestionIndex];
   document.getElementById('questionNumber').innerText = `Вопрос ${currentQuestionIndex+1} из ${questions.length}`;
@@ -37,9 +40,13 @@ function loadQuestion(){
   document.getElementById('customAnswer').value = '';
 }
 
+// === Отправка ответа (варианты кнопок) ===
 function submitAnswer(answer){
-  const custom = document.getElementById('customAnswer').value;
-  console.log(`Ответ на вопрос ${currentQuestionIndex+1}:`, custom || answer);
+  const custom = document.getElementById('customAnswer').value.trim();
+  // если есть свой ответ, берем его вместо выбранного
+  const finalAnswer = custom || answer;
+  console.log(`Ответ на вопрос ${currentQuestionIndex+1}:`, finalAnswer);
+
   currentQuestionIndex++;
   if(currentQuestionIndex < questions.length){
     loadQuestion();
@@ -49,14 +56,27 @@ function submitAnswer(answer){
   }
 }
 
+// === Отправка собственного ответа через кнопку ===
+function submitCustomAnswer(){
+  const custom = document.getElementById('customAnswer').value.trim();
+  if(custom === ""){
+    alert("Пожалуйста, введите свой ответ или выберите вариант выше.");
+    return;
+  }
+  submitAnswer(custom);
+}
+
+// === Переход в профиль ===
 function goToProfile(){ window.location.href = 'profile.html'; }
 
+// === Переключение темы ===
 function toggleTheme(){ document.body.classList.toggle('light'); }
 
 // ==================== Profile ====================
 
 const avatarInput = document.getElementById('avatar');
 const avatarPreview = document.getElementById('avatarPreview');
+
 if(avatarInput){
   avatarInput.addEventListener('change', e=>{
     const file = e.target.files[0];
@@ -68,22 +88,33 @@ if(avatarInput){
   });
 }
 
+// === Сохранение профиля ===
 const saveBtn = document.getElementById('saveProfileBtn');
 const saveMsg = document.getElementById('saveMessage');
+
 if(saveBtn){
   saveBtn.addEventListener('click', ()=>{
     localStorage.setItem('nickname', document.getElementById('nickname').value);
     localStorage.setItem('hobbies', document.getElementById('hobbies').value);
     localStorage.setItem('music', document.getElementById('music').value);
     localStorage.setItem('about', document.getElementById('about').value);
+
     saveMsg.innerText = "Профиль сохранён!";
     setTimeout(()=>saveMsg.innerText="",2000);
   });
 }
 
+// === Загрузка данных профиля при открытии страницы ===
 document.addEventListener('DOMContentLoaded', ()=>{
-  if(document.getElementById('nickname') && localStorage.getItem('nickname')) document.getElementById('nickname').value = localStorage.getItem('nickname');
-  if(document.getElementById('hobbies') && localStorage.getItem('hobbies')) document.getElementById('hobbies').value = localStorage.getItem('hobbies');
-  if(document.getElementById('music') && localStorage.getItem('music')) document.getElementById('music').value = localStorage.getItem('music');
-  if(document.getElementById('about') && localStorage.getItem('about')) document.getElementById('about').value = localStorage.getItem('about');
+  if(document.getElementById('nickname') && localStorage.getItem('nickname')) 
+    document.getElementById('nickname').value = localStorage.getItem('nickname');
+
+  if(document.getElementById('hobbies') && localStorage.getItem('hobbies')) 
+    document.getElementById('hobbies').value = localStorage.getItem('hobbies');
+
+  if(document.getElementById('music') && localStorage.getItem('music')) 
+    document.getElementById('music').value = localStorage.getItem('music');
+
+  if(document.getElementById('about') && localStorage.getItem('about')) 
+    document.getElementById('about').value = localStorage.getItem('about');
 });
