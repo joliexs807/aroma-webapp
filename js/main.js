@@ -1,88 +1,77 @@
-// Тема
-function toggleTheme() {
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+let currentScreen = null;
+let points = 5;
+
+function showScreen(id){
+  if(currentScreen) currentScreen.classList.remove('show');
+  currentScreen = document.getElementById(id);
+  currentScreen.classList.add('show');
 }
 
-// Подгрузка темы
-window.addEventListener('DOMContentLoaded', () => {
-  if(localStorage.getItem('theme')==='light') document.body.classList.add('light');
+function nextScreen(id){ showScreen(id); }
 
-  // Экран выбора роли
-  const roleScreen = document.getElementById('roleScreen');
-  const questionsScreen = document.getElementById('questionsScreen');
-  const choiceBtns = document.querySelectorAll('.choice-btn');
+function selectRole(role){
+  console.log('Выбрана роль:', role);
+  nextScreen('questionsScreen');
+}
 
-  let userRole = null;
-  choiceBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      userRole = btn.dataset.role;
-      localStorage.setItem('userRole', userRole);
-
-      // Плавный переход на экран вопросов
-      roleScreen.classList.remove('show');
-      questionsScreen.classList.add('show');
-
-      startQuestions();
-    });
-  });
-
-  // Вопросы
-  const questions = [
-    {text: "Что тебя радует в этот момент?", options:["Светлое", "Темное"]},
-    {text: "Что тебя сегодня вдохновляет?", options:["Природа", "Люди"]},
-    {text: "Что тебе хочется сделать прямо сейчас?", options:["Поговорить", "Помолчать"]},
-    {text: "Что приносит тебе радость?", options:["Маленькое", "Большое"]},
-    {text: "Чем ты хочешь поделиться с другими?", options:["История", "Мысль"]}
-  ];
-
-  let currentQuestion = 0;
-  const questionTitle = document.getElementById('questionTitle');
-  const questionText = document.getElementById('questionText');
-  const nextBtn = document.querySelector('.next-btn');
-  const customInput = document.getElementById('customAnswer');
-  const answerBtns = document.querySelectorAll('.answer-btn');
-
-  const userAnswers = [];
-
-  function startQuestions() {
-    showQuestion(currentQuestion);
+let questionCount = 1;
+function nextQuestion(){
+  if(questionCount < 5){
+    questionCount++;
+    document.querySelector('#questionsScreen h2').innerText = `Вопрос ${questionCount} из 5`;
+  } else {
+    document.getElementById('finalPoints').innerText = points;
+    nextScreen('endScreen');
   }
+}
 
-  function showQuestion(index) {
-    const q = questions[index];
-    questionTitle.textContent = `Вопрос ${index + 1}`;
-    questionText.textContent = q.text;
-    answerBtns[0].textContent = q.options[0];
-    answerBtns[1].textContent = q.options[1];
-    customInput.value = "";
-  }
+function goToProfile(){ window.location.href = 'profile.html'; }
 
-  answerBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      userAnswers.push(btn.textContent);
-      nextQuestion();
-    });
-  });
+function toggleTheme(){
+  document.body.classList.toggle('light');
+}
 
-  nextBtn.addEventListener('click', () => {
-    if(customInput.value.trim() !== "") {
-      userAnswers.push(customInput.value.trim());
-      nextQuestion();
-    } else {
-      alert("Введите свой вариант ответа или выберите один из вариантов.");
+/* --- Аватар --- */
+const avatarInput = document.getElementById('avatar');
+const avatarPreview = document.getElementById('avatarPreview');
+if(avatarInput){
+  avatarInput.addEventListener('change', e=>{
+    const file = e.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(ev){ avatarPreview.style.backgroundImage = `url(${ev.target.result})`; }
+      reader.readAsDataURL(file);
     }
   });
+}
 
-  function nextQuestion() {
-    currentQuestion++;
-    if(currentQuestion < questions.length) {
-      showQuestion(currentQuestion);
-    } else {
-      // Все вопросы отвечены, начисляем баллы и идем в профиль
-      localStorage.setItem('userPoints', 5); // одинаково для всех новичков
-      localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
-      window.location.href = 'profile.html';
-    }
-  }
+/* --- Сохранение профиля --- */
+const saveBtn = document.getElementById('saveProfileBtn');
+if(saveBtn){
+  saveBtn.addEventListener('click', ()=>{
+    localStorage.setItem('nickname', document.getElementById('nickname').value);
+    localStorage.setItem('hobbies', document.getElementById('hobbies').value);
+    localStorage.setItem('music', document.getElementById('music').value);
+    localStorage.setItem('about', document.getElementById('about').value);
+    document.getElementById('saveMessage').innerText = "Профиль сохранён!";
+    setTimeout(()=>document.getElementById('saveMessage').innerText="",2000);
+  });
+
+  // Загрузка сохранённого профиля при открытии
+  document.addEventListener('DOMContentLoaded', ()=>{
+    if(localStorage.getItem('nickname')) document.getElementById('nickname').value = localStorage.getItem('nickname');
+    if(localStorage.getItem('hobbies')) document.getElementById('hobbies').value = localStorage.getItem('hobbies');
+    if(localStorage.getItem('music')) document.getElementById('music').value = localStorage.getItem('music');
+    if(localStorage.getItem('about')) document.getElementById('about').value = localStorage.getItem('about');
+  });
+}
+
+/* --- Аккордеон правил --- */
+const accordions = document.querySelectorAll('.accordion-btn');
+accordions.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const content = btn.nextElementSibling;
+    if(content.style.maxHeight) content.style.maxHeight = null;
+    else content.style.maxHeight = content.scrollHeight + "px";
+  });
 });
