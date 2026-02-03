@@ -1,88 +1,94 @@
-let currentScreen = 1;
-let userRole = '';
-let questions = [
-  {text:"Что тебя радует в этот момент?", options:["Друзья","Музыка","Другое"], allowOther:true},
-  {text:"Что вызывает улыбку?", options:["Шутка","Природа","Другое"], allowOther:true},
-  {text:"Что важно для тебя сегодня?", options:["Семья","Работа","Другое"], allowOther:true},
-  {text:"Чем хочешь заняться?", options:["Учёба","Игры","Другое"], allowOther:true},
-  {text:"Что тебе интересно узнать?", options:["Факты","Советы","Другое"], allowOther:true}
-];
-let currentQuestion = 0;
-
 // Тема
 function toggleTheme(){
   document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
 }
 
-// Выбор роли
-function selectRole(role){
-  userRole = role;
-  localStorage.setItem('userRole', role);
-  document.getElementById('roleTitle').textContent = `Ты выбрал ${role}`;
-  nextScreen();
-}
+// Подгрузка темы
+window.addEventListener('DOMContentLoaded', ()=>{
+  if(localStorage.getItem('theme')==='light') document.body.classList.add('light');
 
-// Переход на следующий экран
-function nextScreen(){
-  document.getElementById(`screen${currentScreen}`).classList.remove('show');
-  currentScreen++;
-  document.getElementById(`screen${currentScreen}`).classList.add('show');
+  // Профиль
+  const nickname = document.getElementById('nickname');
+  const hobbies = document.getElementById('hobbies');
+  const music = document.getElementById('music');
+  const about = document.getElementById('about');
+  const avatarInput = document.getElementById('avatar');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const saveBtn = document.getElementById('saveProfileBtn');
+  const userPoints = document.getElementById('userPoints');
 
-  if(currentScreen===2){
-    showQuestion();
+  if(userPoints){
+    userPoints.textContent = localStorage.getItem('userPoints') || 0;
   }
-}
 
-// Показ вопроса
-function showQuestion(){
-  if(currentQuestion>=questions.length){
-    nextScreen();
-    return;
+  if(nickname){
+    const saved = JSON.parse(localStorage.getItem('profileData') || '{}');
+    if(saved.nickname) nickname.value = saved.nickname;
+    if(saved.hobbies) hobbies.value = saved.hobbies;
+    if(saved.music) music.value = saved.music;
+    if(saved.about) about.value = saved.about;
+    if(saved.avatar) avatarPreview.style.backgroundImage = `url(${saved.avatar})`;
   }
-  const q = questions[currentQuestion];
-  document.getElementById('questionText').textContent = q.text;
-  const answersDiv = document.getElementById('answers');
-  answersDiv.innerHTML='';
-  document.getElementById('otherInputContainer').style.display = 'none';
 
-  q.options.forEach(opt=>{
-    const btn = document.createElement('button');
-    btn.textContent = opt;
-    btn.onclick = ()=>{
-      if(opt==="Другое" && q.allowOther){
-        document.getElementById('otherInputContainer').style.display='block';
-      } else {
-        btn.classList.add('selected');
-        currentQuestion++;
-        updateProgress();
-        setTimeout(showQuestion,300);
+  // Аватар
+  if(avatarInput){
+    avatarInput.addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(evt){
+          avatarPreview.style.backgroundImage = `url(${evt.target.result})`;
+          localStorage.setItem('profileData', JSON.stringify({
+            ...JSON.parse(localStorage.getItem('profileData')||'{}'),
+            avatar: evt.target.result
+          }));
+        }
+        reader.readAsDataURL(file);
       }
-    }
-    answersDiv.appendChild(btn);
+    });
+  }
+
+  // Сохранение профиля
+  if(saveBtn){
+    saveBtn.addEventListener('click', ()=>{
+      const data = {
+        nickname: nickname.value,
+        hobbies: hobbies.value,
+        music: music.value,
+        about: about.value,
+        avatar: avatarPreview.style.backgroundImage.replace(/^url\(["']?/, '').replace(/["']?\)$/, '')
+      };
+      localStorage.setItem('profileData', JSON.stringify(data));
+      alert('Профиль сохранён! ✨');
+    });
+  }
+
+  // Аккордеон
+  document.querySelectorAll('.accordion-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const content = btn.nextElementSibling;
+      const isOpen = content.style.maxHeight && content.style.maxHeight!=='0px';
+      document.querySelectorAll('.accordion-content').forEach(c=>{c.style.maxHeight=null; c.style.padding='0 20px';});
+      if(!isOpen){content.style.maxHeight = content.scrollHeight+'px'; content.style.padding='10px 20px';}
+    });
   });
 
-  updateProgress();
-}
+  // Кнопка правил
+  const acceptRulesBtn = document.getElementById('acceptRulesBtn');
+  if(acceptRulesBtn){
+    acceptRulesBtn.addEventListener('click', ()=>{
+      window.location.href='profile.html';
+    });
+  }
 
-// Сохранение варианта "Другое"
-function submitOther(){
-  const val = document.getElementById('otherInput').value;
-  if(val.trim()==='') return;
-  document.getElementById('otherInput').value='';
-  document.getElementById('otherInputContainer').style.display='none';
-  currentQuestion++;
-  updateProgress();
-  setTimeout(showQuestion,300);
-}
-
-// Прогресс бар
-function updateProgress(){
-  const bar = document.getElementById('progressBar');
-  const percent = (currentQuestion/questions.length)*100;
-  bar.style.width = percent+'%';
-}
-
-// Переход в профиль
-function goToProfile(){
-  window.location.href = "profile.html";
-}
+  // Onboarding кнопки выбора
+  document.querySelectorAll('.choice-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const role = btn.dataset.role;
+      localStorage.setItem('userRole', role);
+      alert(`Вы выбрали: ${role}`);
+      // Тут можно плавный переход на вопросы
+    });
+  });
+});
