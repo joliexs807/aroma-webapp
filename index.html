@@ -5,7 +5,6 @@
 <title>Аврора — интерактив</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-
   body {
     margin: 0;
     font-family: 'Comfortaa', cursive;
@@ -13,106 +12,17 @@
     color: #fff;
     overflow: hidden;
   }
-
-  .screen {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    padding: 20px;
-  }
-
-  .screen.show {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-    color: #fff;
-    text-align: center;
-    text-shadow:
-      0 0 10px rgba(0,0,0,0.6),
-      0 0 20px #b689f5,
-      0 0 30px #d2aaff,
-      0 0 40px #b689f5;
-  }
-
-  p {
-    font-size: 1.3em;
-    max-width: 700px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #fff;
-    text-shadow:
-      0 0 5px rgba(0,0,0,0.5),
-      0 0 10px #b689f5,
-      0 0 15px #d2aaff;
-  }
-
-  .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  button {
-    padding: 15px 30px;
-    margin: 10px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    background: #b689f5;
-    color: #fff;
-    box-shadow: 0 0 20px #b689f5;
-    transition: 0.3s;
-  }
-
-  button:hover {
-    box-shadow: 0 0 40px #d2aaff;
-    transform: scale(1.05);
-  }
-
-  input[type="text"] {
-    padding: 10px;
-    margin-top: 10px;
-    font-size: 1em;
-    border-radius: 10px;
-    border: none;
-    width: 250px;
-  }
-
-  .score {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 1.5em;
-    text-shadow: 0 0 15px #b689f5;
-  }
-
-  .history {
-    margin-top: 20px;
-    max-width: 400px;
-    text-align: left;
-  }
-
-  .history li {
-    margin-bottom: 8px;
-  }
+  .screen { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:opacity 0.5s ease; padding:20px;}
+  .screen.show { opacity:1; pointer-events:all; }
+  h1 { font-size:3em; margin-bottom:20px; text-align:center; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff; }
+  p { font-size:1.3em; max-width:700px; margin-bottom:20px; text-align:center; text-shadow:0 0 5px rgba(0,0,0,0.5),0 0 10px #b689f5,0 0 15px #d2aaff; }
+  .button-container { display:flex; flex-direction:column; align-items:center; }
+  button { padding:15px 30px; margin:10px; font-size:1.2em; border:none; border-radius:30px; cursor:pointer; background:#b689f5; color:#fff; box-shadow:0 0 20px #b689f5; transition:0.3s; }
+  button:hover { box-shadow:0 0 40px #d2aaff; transform:scale(1.05);}
+  input[type="text"] { padding:10px; margin-top:10px; font-size:1em; border-radius:10px; border:none; width:250px; }
 </style>
 </head>
 <body>
-
-<div class="score">Очки: 0</div>
 
 <!-- Экран 1 — Вход -->
 <div id="screen1" class="screen show">
@@ -141,157 +51,46 @@
   </div>
 </div>
 
-<!-- Экран 4 — Переход перед кабинетом -->
+<!-- Экран 4 — Переход к кабинету -->
 <div id="screen4" class="screen">
   <h1>Поздравляем! ✨</h1>
-  <p>Ты завершил свои вопросы. Теперь можешь перейти в личный кабинет, чтобы увидеть историю своих действий и очки.</p>
+  <p>Ты завершил свои вопросы. Теперь можешь перейти в личный кабинет.</p>
   <div class="button-container">
-    <button onclick="nextScreen(5)">Перейти в кабинет</button>
-    <button onclick="restart()">Начать заново</button>
+    <button onclick="goToProfile()">Перейти в кабинет</button>
   </div>
 </div>
 
-<!-- Экран 5 — Личный кабинет -->
-<div id="screen5" class="screen">
-  <h1>Твой кабинет 🌒✨</h1>
-  <p>Роль: <span id="userRole"></span></p>
-  <p>Очки: <span id="userScore"></span></p>
-
-  <h2>История действий:</h2>
-  <ul class="history" id="historyList"></ul>
-
-  <button onclick="restart()">Начать заново</button>
-</div>
-
 <script>
-let score = 0;
 let role = '';
 let history = [];
-let transitioning = false;
 let questionIndex = 0;
 let currentQuestion = null;
-
-// Вопросы для каждой роли с возможностью "Другое"
 const questions = {
   'Душа': [
-    {text: 'Что сейчас больше всего шумит внутри тебя?', answers: ['Хочу говорить', 'Хочу молчать'], allowOther: true},
-    {text: 'Что тебя радует в этот момент?', answers: ['Семья', 'Творчество'], allowOther: true},
-    {text: 'Кому бы ты хотел довериться?', answers: ['Друзьям', 'Сам себе'], allowOther: false},
-    {text: 'Что бы ты хотел изменить прямо сейчас?', answers: ['Эмоции', 'Действия'], allowOther: false},
-    {text: 'Чем хочешь поделиться?', answers: ['История', 'Совет'], allowOther: false}
+    {text: 'Что сейчас больше всего шумит внутри тебя?', answers: ['Хочу говорить','Хочу молчать'], allowOther:true},
+    {text: 'Что тебя радует в этот момент?', answers:['Семья','Творчество'], allowOther:true},
+    {text: 'Кому бы ты хотел довериться?', answers:['Друзьям','Сам себе'], allowOther:false},
+    {text: 'Что бы ты хотел изменить прямо сейчас?', answers:['Эмоции','Действия'], allowOther:false},
+    {text: 'Чем хочешь поделиться?', answers:['История','Совет'], allowOther:false}
   ],
   'Свет': [
-    {text: 'Чем хочешь поделиться сегодня?', answers: ['Делиться светом', 'Помогать другим'], allowOther: true},
-    {text: 'Что вдохновляет тебя быть светом?', answers: ['Добро', 'Любовь'], allowOther: false},
-    {text: 'Как хочешь помогать?', answers: ['Советом', 'Действием'], allowOther: false},
-    {text: 'Кому важнее всего помочь?', answers: ['Близким', 'Незнакомым'], allowOther: false},
-    {text: 'Что хочешь оставить после себя?', answers: ['Свет', 'Энергию'], allowOther: false}
+    {text:'Чем хочешь поделиться сегодня?', answers:['Делиться светом','Помогать другим'], allowOther:true},
+    {text:'Что вдохновляет тебя быть светом?', answers:['Добро','Любовь'], allowOther:false},
+    {text:'Как хочешь помогать?', answers:['Советом','Действием'], allowOther:false},
+    {text:'Кому важнее всего помочь?', answers:['Близким','Незнакомым'], allowOther:false},
+    {text:'Что хочешь оставить после себя?', answers:['Свет','Энергию'], allowOther:false}
   ]
 };
 
-function fadeOut(element, callback) {
-  element.style.opacity = 0;
-  setTimeout(() => {
-    element.classList.remove('show');
-    if(callback) callback();
-  }, 500);
-}
-
-function fadeIn(element) {
-  element.classList.add('show');
-  element.style.opacity = 1;
-}
-
-function nextScreen(num) {
-  if (transitioning) return;
-  transitioning = true;
-
-  const current = document.querySelector('.screen.show');
-  fadeOut(current, () => {
-    if(num === 5) {
-      showCabinet();
-    }
-    const next = document.getElementById('screen'+num);
-    fadeIn(next);
-    transitioning = false;
-  });
-}
-
-function selectRole(chosenRole) {
-  role = chosenRole;
-  history.push(`Выбрана роль: ${role}`);
-  questionIndex = 0;
-  showQuestion();
-  nextScreen(3);
-}
-
-function showQuestion() {
-  currentQuestion = questions[role][questionIndex];
-  document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
-  document.getElementById('questionText').textContent = currentQuestion.text;
-
-  const answerContainer = document.getElementById('answerButtons');
-  answerContainer.innerHTML = '';
-  currentQuestion.answers.forEach(ans => {
-    const btn = document.createElement('button');
-    btn.textContent = ans;
-    btn.onclick = () => answerSelected(ans);
-    answerContainer.appendChild(btn);
-  });
-
-  const otherContainer = document.getElementById('otherInputContainer');
-  if (currentQuestion.allowOther) {
-    otherContainer.style.display = 'flex';
-  } else {
-    otherContainer.style.display = 'none';
-  }
-}
-
-function answerSelected(answer) {
-  history.push(`Вопрос ${questionIndex+1}: ${answer}`);
-  nextQuestion();
-}
-
-function submitOther() {
-  const input = document.getElementById('otherInput');
-  if(input.value.trim() === '') return;
-  history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`);
-  input.value = '';
-  nextQuestion();
-}
-
-function nextQuestion() {
-  questionIndex++;
-  if(questionIndex >= questions[role].length) {
-    nextScreen(4); // экран-переход перед кабинетом
-  } else {
-    showQuestion();
-  }
-}
-
-function showCabinet() {
-  document.querySelector('.score').textContent = 'Очки: ' + score;
-  document.getElementById('userRole').textContent = role;
-  document.getElementById('userScore').textContent = 20; // фиксированные очки
-
-  const historyList = document.getElementById('historyList');
-  historyList.innerHTML = '';
-  history.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = item;
-    historyList.appendChild(li);
-  });
-}
-
-function restart() {
-  score = 0;
-  role = '';
-  history = [];
-  questionIndex = 0;
-  document.querySelector('.score').textContent = 'Очки: 0';
-  nextScreen(1);
-}
+function fadeOut(el, cb){ el.style.opacity=0; setTimeout(()=>{ el.classList.remove('show'); if(cb) cb(); },500);}
+function fadeIn(el){ el.classList.add('show'); el.style.opacity=1;}
+function nextScreen(num){ const current=document.querySelector('.screen.show'); fadeOut(current, ()=>{ fadeIn(document.getElementById('screen'+num)); }); }
+function selectRole(chosenRole){ role=chosenRole; history.push(`Выбрана роль: ${role}`); questionIndex=0; showQuestion(); nextScreen(3); }
+function showQuestion(){ currentQuestion=questions[role][questionIndex]; document.getElementById('roleTitle').textContent=`Ты выбрал: ${role}`; document.getElementById('questionText').textContent=currentQuestion.text; const answerContainer=document.getElementById('answerButtons'); answerContainer.innerHTML=''; currentQuestion.answers.forEach(ans=>{ const btn=document.createElement('button'); btn.textContent=ans; btn.onclick=()=>answerSelected(ans); answerContainer.appendChild(btn); }); document.getElementById('otherInputContainer').style.display=currentQuestion.allowOther?'flex':'none'; }
+function answerSelected(answer){ history.push(`Вопрос ${questionIndex+1}: ${answer}`); nextQuestion(); }
+function submitOther(){ const input=document.getElementById('otherInput'); if(input.value.trim()==='') return; history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`); input.value=''; nextQuestion(); }
+function nextQuestion(){ questionIndex++; if(questionIndex>=questions[role].length){ nextScreen(4); }else{ showQuestion(); } }
+function goToProfile(){ localStorage.setItem('userRole', role); localStorage.setItem('history', JSON.stringify(history)); window.location.href='profile.html'; }
 </script>
-
 </body>
 </html>
