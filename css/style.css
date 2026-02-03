@@ -24,7 +24,6 @@ body {
   min-height:100vh;
   padding:20px;
 }
-
 body.light {background: var(--bg-light); color: var(--text-light);}
 
 .container {
@@ -39,9 +38,25 @@ body.light {background: var(--bg-light); color: var(--text-light);}
 
 h1 {font-size:2.2em; margin-bottom:20px; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark);}
 body.light h1 {text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
-
 p {font-size:1.2em; margin-bottom:20px; line-height:1.5;}
 
+/* Прогресс бар */
+#progressContainer {
+  width:100%;
+  height:10px;
+  background: rgba(255,255,255,0.2);
+  border-radius:5px;
+  margin-bottom:20px;
+  overflow:hidden;
+}
+#progressBar {
+  height:100%;
+  width:0%;
+  background: var(--button-dark);
+  transition: width 0.5s ease;
+}
+
+/* Кнопки */
 button {
   border:none;
   border-radius:30px;
@@ -57,7 +72,7 @@ button {
 button:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
 body.light button {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
 
-/* Тема кнопки смены темы */
+/* Тема кнопки */
 .theme-toggle {position:absolute; top:20px; left:20px; padding:8px 15px; border-radius:20px;}
 
 /* Кнопки выбора роли */
@@ -81,7 +96,9 @@ body.light button {background: var(--button-light); color: var(--text-light); bo
   padding:15px 30px;
   font-size:1.3em;
   margin:10px;
+  transition:0.3s;
 }
+#answers button.selected {box-shadow:0 0 40px var(--shadow-light); transform:scale(1.05);}
 
 /* Поля ввода и textarea */
 input[type=text], textarea {
@@ -97,5 +114,18 @@ input[type=text], textarea {
 }
 input[type=text]:focus, textarea:focus {outline:none; box-shadow:0 0 25px var(--shadow-dark);}
 body.light input[type=text]:focus, body.light textarea:focus {box-shadow:0 0 25px var(--shadow-light);}
-
 textarea {resize:none; min-height:80px;}
+
+/* Эмодзи */
+.emoji-container {font-size:1.5em; margin-bottom:10px;}
+
+/* Аватар */
+.avatar-preview {
+  width:120px; height:120px;
+  border-radius:50%;
+  background-size:cover;
+  background-position:center;
+  margin:10px auto 0;
+  box-shadow:0 0 20px var(--shadow-dark);
+}
+body.light .avatar-preview {box-shadow:0 0 20px var(--shadow-light);}
