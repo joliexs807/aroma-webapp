@@ -2,137 +2,128 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aurora</title>
+<title>Аврора</title>
 <style>
-body {
-  margin:0;
-  padding:24px;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background: linear-gradient(180deg,#eef1ff,#ffffff);
-  color:#222;
-  text-align:center;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
-h1 { font-size:30px; margin-bottom:8px; }
-p { font-size:16px; opacity:0.8; margin-bottom:32px; }
+  body {
+    margin: 0;
+    font-family: 'Comfortaa', cursive;
+    background: linear-gradient(135deg, #1a0a2e, #4b2a57);
+    color: #fff;
+    overflow: hidden;
+  }
 
-.button {
-  width:100%; max-width:320px;
-  margin:12px auto;
-  padding:16px;
-  font-size:16px;
-  border-radius:18px;
-  border:none;
-  cursor:pointer;
-  display:block;
-  transition: transform 0.2s, box-shadow 0.3s;
-  position: relative;
-  overflow: hidden;
-}
+  .screen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+  }
 
-.button:hover { transform: scale(1.05); }
+  .screen.active {
+    opacity: 1;
+    pointer-events: all;
+  }
 
-.human { background:#6c63ff; color:#fff; animation: glow-human 2s ease-in-out infinite alternate; }
-.light { background:#ffffff; color:#6c63ff; border:2px solid #6c63ff; animation: glow-light 2s ease-in-out infinite alternate; }
+  h1 {
+    font-size: 3em;
+    text-align: center;
+    text-shadow: 0 0 20px #b689f5;
+    margin-bottom: 20px;
+  }
 
-/* Постоянное мерцание кнопок */
-@keyframes glow-human {
-  0% { box-shadow: 0 0 15px rgba(108,99,255,0.5),0 0 30px rgba(108,99,255,0.3); }
-  50% { box-shadow: 0 0 25px rgba(108,99,255,0.8),0 0 50px rgba(108,99,255,0.5); }
-  100% { box-shadow: 0 0 15px rgba(108,99,255,0.5),0 0 30px rgba(108,99,255,0.3); }
-}
-@keyframes glow-light {
-  0% { box-shadow: 0 0 15px rgba(255,255,200,0.5),0 0 30px rgba(255,255,200,0.3); }
-  50% { box-shadow: 0 0 25px rgba(255,255,200,0.8),0 0 50px rgba(255,255,200,0.5); }
-  100% { box-shadow: 0 0 15px rgba(255,255,200,0.5),0 0 30px rgba(255,255,200,0.3); }
-}
+  p {
+    font-size: 1.3em;
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
 
-/* Сияние при клике */
-.human.active { animation: sparkle-human 0.6s ease-out; }
-.light.active { animation: sparkle-light 0.6s ease-out; }
+  button {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background: #b689f5;
+    color: #fff;
+    box-shadow: 0 0 20px #b689f5;
+    transition: 0.3s;
+  }
 
-@keyframes sparkle-human {
-  0% { box-shadow:0 0 10px rgba(108,99,255,0.6),0 0 20px rgba(108,99,255,0.3);}
-  50% { box-shadow:0 0 40px rgba(108,99,255,0.9),0 0 80px rgba(108,99,255,0.6);}
-  100% { box-shadow:0 0 25px rgba(108,99,255,0.8),0 0 50px rgba(108,99,255,0.5);}
-}
-@keyframes sparkle-light {
-  0% { box-shadow:0 0 10px rgba(255,255,200,0.6),0 0 20px rgba(255,255,200,0.3);}
-  50% { box-shadow:0 0 40px rgba(255,255,200,0.9),0 0 80px rgba(255,255,200,0.6);}
-  100% { box-shadow:0 0 25px rgba(255,255,200,0.8),0 0 50px rgba(255,255,200,0.5);}
-}
+  button:hover {
+    box-shadow: 0 0 40px #d2aaff;
+    transform: scale(1.05);
+  }
 
-/* Звёздочки */
-.star {
-  position: absolute;
-  width: 6px; height: 6px;
-  background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 70%);
-  border-radius:50%;
-  pointer-events: none;
-  opacity:0;
-  animation: star-fade 1s linear forwards;
-}
-@keyframes star-fade {
-  0% { opacity:1; transform: scale(0.3) translate(0,0);}
-  50% { transform: scale(1.2) translate(var(--x), var(--y)); opacity:1;}
-  100% { opacity:0; transform: scale(0) translate(var(--x), var(--y));}
-}
-
-.result { margin-top:24px; font-size:20px; font-weight:bold; opacity:0; transition: opacity 0.5s ease; }
-.score { margin-top:16px; font-size:18px; }
+  .score {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 1.5em;
+    text-shadow: 0 0 15px #b689f5;
+  }
 </style>
 </head>
 <body>
 
-<h1>✨ Aurora</h1>
-<p>Выбери, с какой стороны ты сейчас</p>
+<div class="score">Очки: 0</div>
 
-<button class="button human" onclick="chooseRole('human', this)">🌱 Я человек</button>
-<button class="button light" onclick="chooseRole('light', this)">✨ Я свет</button>
+<!-- Экран 1 — Вход -->
+<div id="screen1" class="screen active">
+  <h1>Добро пожаловать в Аврору ✨</h1>
+  <p>Ты нашел самое безопасное место во вселенной. Здесь тебя выслушают, помогут, и никогда не осудят. Ты дома.</p>
+  <button onclick="nextScreen(2)">Начать</button>
+</div>
 
-<div class="result" id="result"></div>
-<div class="score" id="score">Очки: 0</div>
+<!-- Экран 2 — Выбор -->
+<div id="screen2" class="screen">
+  <h1>Кем ты хочешь быть?</h1>
+  <button onclick="selectRole('Человек')">Человек</button>
+  <button onclick="selectRole('Свет')">Свет</button>
+</div>
+
+<!-- Экран 3 — Первый вопрос -->
+<div id="screen3" class="screen">
+  <h1 id="roleTitle"></h1>
+  <p>Что сейчас больше всего шумит внутри тебя?</p>
+  <button onclick="nextScreen(4)">Хочу говорить</button>
+  <button onclick="nextScreen(4)">Хочу молчать</button>
+</div>
+
+<!-- Экран 4 — Финал пока визуал -->
+<div id="screen4" class="screen">
+  <h1>Ты дома 🌒✨</h1>
+  <p>Здесь можно быть любым. Продолжай исследовать Аврору.</p>
+</div>
 
 <script>
-let points = 0;
+  let score = 0;
+  let role = '';
 
-// Функция для создания звездочек
-function createStars(btn){
-    for(let i=0;i<5;i++){
-        const star = document.createElement('div');
-        star.className='star';
-        const x = (Math.random()*100-50)+'px';
-        const y = (Math.random()*100-50)+'px';
-        star.style.setProperty('--x', x);
-        star.style.setProperty('--y', y);
-        btn.appendChild(star);
-        setTimeout(()=>{ star.remove(); },1000);
-    }
-}
+  function nextScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen'+num).classList.add('active');
 
-function chooseRole(role, btn){
-    const resultDiv = document.getElementById('result');
-    const scoreDiv = document.getElementById('score');
+    // Простая магия — добавляем очки визуально
+    score += 10;
+    document.querySelector('.score').textContent = 'Очки: ' + score;
+  }
 
-    points +=10;
-
-    resultDiv.textContent = role==='human' 
-        ? "🌱 Отлично! Ты выбрал Человек! +10 очков"
-        : "✨ Отлично! Ты выбрал Свет! +10 очков";
-
-    resultDiv.style.opacity =1;
-    scoreDiv.textContent = `Очки: ${points}`;
-
-    // Сияние при клике
-    btn.classList.add('active');
-    setTimeout(()=>{ btn.classList.remove('active'); },600);
-
-    // Создаем звезды
-    createStars(btn);
-
-    setTimeout(()=>{ resultDiv.style.opacity=0; },2000);
-}
+  function selectRole(chosenRole) {
+    role = chosenRole;
+    document.getElementById('roleTitle').textContent = `Ты выбрал: ${role}`;
+    nextScreen(3);
+  }
 </script>
 
 </body>
