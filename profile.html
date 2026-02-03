@@ -6,18 +6,19 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 body{margin:0;font-family:'Comfortaa',cursive;background:linear-gradient(135deg,#0d0415,#2a1238);color:#fff;transition:background 0.5s,color 0.5s;}
-body.light{background:linear-gradient(135deg,#e0dff5,#fff0f5);color:#222;}
+body.light{background:linear-gradient(135deg,#e0dff5,#fff0f5) !important;color:#222 !important;}
 .container{max-width:900px;margin:auto;padding:30px;}
-h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;}
-body.light h1{text-shadow:0 0 5px #b689f5,0 0 10px #d2aaff;}
+h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;transition:text-shadow 0.5s;}
+body.light h1{text-shadow:0 0 5px #b689f5,0 0 10px #d2aaff !important;}
 label{display:block;margin-top:15px;font-weight:bold;}
 input[type=text],textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:5px;transition:box-shadow 0.5s;}
 .avatar-preview{margin-top:10px;width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid #b689f5;box-shadow:0 0 20px #b689f5;}
 .section{margin-bottom:25px;padding:15px;border-radius:15px;box-shadow:0 0 20px #b689f5;transition:box-shadow 0.5s;}
-body.light .section{box-shadow:0 0 15px #b689f5;}
+body.light .section{box-shadow:0 0 15px #b689f5 !important;}
 .history ul{list-style:none;padding:0;}
 .history li{margin-bottom:8px;background:rgba(255,255,255,0.1);padding:8px;border-radius:10px;}
 .theme-toggle{position:absolute;top:20px;left:20px;padding:8px 15px;border-radius:20px;border:none;cursor:pointer;background:#b689f5;color:#fff;}
+body.light .theme-toggle{background:#d2aaff !important;color:#222 !important;}
 </style>
 </head>
 <body>
@@ -73,14 +74,22 @@ body.light .section{box-shadow:0 0 15px #b689f5;}
 </div>
 
 <script>
-function toggleTheme(){document.body.classList.toggle('light');}
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');
+}
 
 const roleInput=document.getElementById('role');
 const historyList=document.getElementById('historyList');
 const avatarInput=document.getElementById('avatarInput');
 const avatarPreview=document.getElementById('avatarPreview');
 
-window.onload=function(){
+window.addEventListener('DOMContentLoaded',()=>{
+  // применяем тему
+  const theme=localStorage.getItem('theme')||'dark';
+  if(theme==='light') document.body.classList.add('light');
+
+  // загружаем роль и историю
   const role=localStorage.getItem('userRole')||'';
   const history=JSON.parse(localStorage.getItem('history')||'[]');
   roleInput.value=role;
@@ -89,8 +98,9 @@ window.onload=function(){
     li.textContent=item;
     historyList.appendChild(li);
   });
-}
+});
 
+// аватар
 avatarInput.addEventListener('change',function(e){
   const file=e.target.files[0];
   if(!file) return;
