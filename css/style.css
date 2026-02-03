@@ -132,3 +132,56 @@ body.light .custom-file-btn {
   color: var(--text-light);
   box-shadow:0 0 20px var(--shadow-light);
 }
+
+/* Аккордеон */
+.accordion {
+  margin:20px 0;
+  text-align:left;
+}
+
+.accordion-item {
+  margin-bottom:10px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.accordion-btn {
+  width:100%;
+  background: var(--button-dark);
+  color:#fff;
+  padding:12px 20px;
+  font-size:1.1em;
+  border:none;
+  cursor:pointer;
+  text-align:left;
+  transition:0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.accordion-btn:hover {transform:scale(1.02); box-shadow:0 0 30px var(--shadow-light);}
+body.light .accordion-btn {background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light);}
+
+.accordion-content {
+  max-height:0;
+  overflow:hidden;
+  background: rgba(0,0,0,0.15);
+  color:#fff;
+  padding:0 20px;
+  transition:max-height 0.4s ease, padding 0.4s ease;
+}
+body.light .accordion-content {background: rgba(255,255,255,0.3); color: var(--text-light);}
+.accordion-content p {margin:10px 0;}
+
+button#acceptRulesBtn {
+  display:block;
+  margin:30px auto 0;
+  font-size:1.3em;
+  padding:15px 30px;
+  border-radius:30px;
+  background: var(--button-dark);
+  color:#fff;
+  box-shadow:0 0 25px var(--shadow-dark);
+  transition:0.3s, transform 0.3s, box-shadow 0.3s;
+}
+button#acceptRulesBtn:hover {transform:scale(1.05); box-shadow:0 0 40px var(--shadow-light);}
+body.light button#acceptRulesBtn {background: var(--button-light); color: var(--text-light); box-shadow:0 0 25px var(--shadow-light);}
