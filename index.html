@@ -16,8 +16,8 @@ body {
 }
 
 body.light {
-  background: linear-gradient(135deg, #e0dff5, #fff0f5);
-  color: #222;
+  background: linear-gradient(135deg, #e0dff5, #fff0f5) !important;
+  color: #222 !important;
 }
 
 .screen {
@@ -31,7 +31,7 @@ body.light {
   align-items:center;
   opacity:0;
   pointer-events:none;
-  transition: opacity 0.5s ease;
+  transition:opacity 0.5s ease;
   padding:20px;
 }
 
@@ -44,15 +44,12 @@ h1 {
   font-size:3em;
   margin-bottom:20px;
   text-align:center;
-  text-shadow:
-    0 0 10px rgba(0,0,0,0.6),
-    0 0 20px #b689f5,
-    0 0 30px #d2aaff;
+  text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;
   transition: text-shadow 0.5s;
 }
 
 body.light h1 {
-  text-shadow: 0 0 5px #b689f5,0 0 10px #d2aaff;
+  text-shadow: 0 0 5px #b689f5,0 0 10px #d2aaff !important;
 }
 
 p {
@@ -65,7 +62,7 @@ p {
 }
 
 body.light p {
-  text-shadow:0 0 3px #b689f5,0 0 7px #d2aaff;
+  text-shadow:0 0 3px #b689f5,0 0 7px #d2aaff !important;
 }
 
 .button-container {
@@ -111,6 +108,11 @@ input[type="text"] {
   cursor:pointer;
   background:#b689f5;
   color:#fff;
+}
+
+body.light .theme-toggle {
+  background:#d2aaff !important;
+  color:#222 !important;
 }
 </style>
 </head>
@@ -185,11 +187,18 @@ function showQuestion(){currentQuestion=questions[role][questionIndex];document.
 function answerSelected(answer){history.push(`Вопрос ${questionIndex+1}: ${answer}`);nextQuestion();}
 function submitOther(){const input=document.getElementById('otherInput');if(input.value.trim()==='')return;history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`);input.value='';nextQuestion();}
 function nextQuestion(){questionIndex++;if(questionIndex>=questions[role].length){nextScreen(4);}else{showQuestion();}}
-function goToProfile(){localStorage.setItem('userRole',role);localStorage.setItem('history',JSON.stringify(history));window.location.href='profile.html';}
+function goToProfile(){localStorage.setItem('userRole',role);localStorage.setItem('history',JSON.stringify(history));localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');window.location.href='profile.html';}
 
 function toggleTheme(){
   document.body.classList.toggle('light');
+  localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');
 }
+
+// применяем тему при загрузке
+window.addEventListener('DOMContentLoaded',()=>{
+  const theme=localStorage.getItem('theme')||'dark';
+  if(theme==='light') document.body.classList.add('light');
+});
 </script>
 </body>
 </html>
