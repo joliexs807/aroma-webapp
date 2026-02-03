@@ -22,15 +22,15 @@ body {
 body.light { background: var(--bg-light); color: var(--text-light); }
 
 .container { max-width: 600px; margin:50px auto; padding:30px; text-align:center; border-radius:20px; transition: all 0.4s; }
-.screen { display:block; } /* профиль всегда виден */
 
-h1 { margin-bottom: 20px; text-shadow: 0 0 10px var(--shadow-dark); }
+.screen { display:none; opacity:0; transition: opacity 0.5s ease; }
+.screen.show { display:block; opacity:1; }
+
+h1, h2 { margin-bottom:20px; text-shadow:0 0 10px var(--shadow-dark); }
 
 .theme-toggle { position: fixed; top: 20px; right: 20px; }
 
-.profile-points { font-size: 1.3em; margin-bottom: 20px; }
-
-/* Секции профиля */
+/* Карточки и секции */
 .profile-section { margin-bottom: 25px; padding:20px; border-radius:20px; background: var(--card-bg-dark); box-shadow:0 0 20px var(--shadow-dark); transition:0.3s;}
 .profile-section:hover { box-shadow:0 0 40px var(--shadow-light); transform: translateY(-3px); }
 body.light .profile-section { background: var(--card-bg-light); box-shadow:0 0 20px var(--shadow-light); }
@@ -62,7 +62,7 @@ body.light .avatar-preview { border-color: var(--button-light); box-shadow: 0 0 
 .custom-file-btn:hover { transform: scale(1.05); box-shadow:0 0 40px var(--shadow-light); }
 body.light .custom-file-btn { background: var(--button-light); color: var(--text-light); box-shadow:0 0 20px var(--shadow-light); }
 
-/* Inputs */
+/* Inputs и textarea */
 input, textarea {
   width: 90%;
   padding:15px;
@@ -96,4 +96,7 @@ body.light .next-btn { background: var(--button-light); color: var(--text-light)
 
 .save-message { margin-top:10px; color:#8a2be2; font-weight:bold; font-size:1.1em; text-shadow:0 0 10px #fff; }
 
+/* Анимации */
 @keyframes pulse {0%{box-shadow:0 0 25px var(--shadow-dark);}50%{box-shadow:0 0 50px var(--shadow-light);}100%{box-shadow:0 0 25px var(--shadow-dark);}}
+.fade-in { opacity:0; animation: fadeIn 1s forwards; }
+@keyframes fadeIn { to {opacity:1;} }
