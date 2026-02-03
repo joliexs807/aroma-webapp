@@ -8,21 +8,17 @@
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
-<div class="container screen show">
+<div class="container screen show" id="profileScreen">
   <h1>Личный кабинет ✨</h1>
-
-  <!-- Панель баллов -->
   <div class="profile-points">
-    <span>Баллы: <strong id="userPoints">0</strong> / 20</span>
+    Баллы: <strong id="userPoints">0</strong> / 20
   </div>
 
-  <!-- Карточка Ник -->
   <div class="profile-card">
     <div class="card-icon">📝</div>
     <input type="text" id="nickname" placeholder="Твой ник"/>
   </div>
 
-  <!-- Карточка Аватар -->
   <div class="profile-card">
     <div class="card-icon">👤</div>
     <label for="avatar" class="custom-file-btn">Выбрать аватар</label>
@@ -30,29 +26,24 @@
     <div id="avatarPreview" class="avatar-preview"></div>
   </div>
 
-  <!-- Карточка Хобби -->
   <div class="profile-card">
     <div class="card-icon">🎨</div>
     <textarea id="hobbies" placeholder="Твои хобби"></textarea>
   </div>
 
-  <!-- Карточка Любимая музыка -->
   <div class="profile-card">
     <div class="card-icon">🎵</div>
     <textarea id="music" placeholder="Любимая музыка"></textarea>
   </div>
 
-  <!-- Карточка О себе -->
   <div class="profile-card">
     <div class="card-icon">💫</div>
     <textarea id="about" placeholder="О себе"></textarea>
   </div>
 
-  <!-- Кнопка Сохранить -->
   <button id="saveProfileBtn">Сохранить профиль</button>
-
 </div>
 
-<script src="js/profile.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
