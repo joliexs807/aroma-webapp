@@ -4,25 +4,119 @@
 <meta charset="UTF-8">
 <title>Аврора — интерактив</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-  body {
-    margin: 0;
-    font-family: 'Comfortaa', cursive;
-    background: linear-gradient(135deg, #0d0415, #2a1238);
-    color: #fff;
-    overflow: hidden;
-  }
-  .screen { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:opacity 0.5s ease; padding:20px;}
-  .screen.show { opacity:1; pointer-events:all; }
-  h1 { font-size:3em; margin-bottom:20px; text-align:center; text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff; }
-  p { font-size:1.3em; max-width:700px; margin-bottom:20px; text-align:center; text-shadow:0 0 5px rgba(0,0,0,0.5),0 0 10px #b689f5,0 0 15px #d2aaff; }
-  .button-container { display:flex; flex-direction:column; align-items:center; }
-  button { padding:15px 30px; margin:10px; font-size:1.2em; border:none; border-radius:30px; cursor:pointer; background:#b689f5; color:#fff; box-shadow:0 0 20px #b689f5; transition:0.3s; }
-  button:hover { box-shadow:0 0 40px #d2aaff; transform:scale(1.05);}
-  input[type="text"] { padding:10px; margin-top:10px; font-size:1em; border-radius:10px; border:none; width:250px; }
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Comfortaa', cursive;
+  background: linear-gradient(135deg, #0d0415, #2a1238);
+  color: #fff;
+  overflow: hidden;
+  transition: background 0.5s, color 0.5s;
+}
+
+body.light {
+  background: linear-gradient(135deg, #e0dff5, #fff0f5);
+  color: #222;
+}
+
+.screen {
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity 0.5s ease;
+  padding:20px;
+}
+
+.screen.show {
+  opacity:1;
+  pointer-events:all;
+}
+
+h1 {
+  font-size:3em;
+  margin-bottom:20px;
+  text-align:center;
+  text-shadow:
+    0 0 10px rgba(0,0,0,0.6),
+    0 0 20px #b689f5,
+    0 0 30px #d2aaff;
+  transition: text-shadow 0.5s;
+}
+
+body.light h1 {
+  text-shadow: 0 0 5px #b689f5,0 0 10px #d2aaff;
+}
+
+p {
+  font-size:1.3em;
+  max-width:700px;
+  margin-bottom:20px;
+  text-align:center;
+  text-shadow:0 0 5px rgba(0,0,0,0.5),0 0 10px #b689f5,0 0 15px #d2aaff;
+  transition: text-shadow 0.5s;
+}
+
+body.light p {
+  text-shadow:0 0 3px #b689f5,0 0 7px #d2aaff;
+}
+
+.button-container {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+button {
+  padding:15px 30px;
+  margin:10px;
+  font-size:1.2em;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  background:#b689f5;
+  color:#fff;
+  box-shadow: 0 0 20px #b689f5;
+  transition:0.3s, box-shadow 0.5s;
+}
+
+button:hover {
+  box-shadow: 0 0 40px #d2aaff;
+  transform: scale(1.05);
+}
+
+input[type="text"] {
+  padding:10px;
+  margin-top:10px;
+  font-size:1em;
+  border-radius:10px;
+  border:none;
+  width:250px;
+}
+
+.theme-toggle {
+  position:absolute;
+  top:20px;
+  left:20px;
+  padding:8px 15px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+  background:#b689f5;
+  color:#fff;
+}
 </style>
 </head>
 <body>
+
+<button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
 <!-- Экран 1 — Вход -->
 <div id="screen1" class="screen show">
@@ -61,36 +155,41 @@
 </div>
 
 <script>
-let role = '';
-let history = [];
-let questionIndex = 0;
-let currentQuestion = null;
-const questions = {
+let role='';
+let history=[];
+let questionIndex=0;
+let currentQuestion=null;
+
+const questions={
   'Душа': [
-    {text: 'Что сейчас больше всего шумит внутри тебя?', answers: ['Хочу говорить','Хочу молчать'], allowOther:true},
-    {text: 'Что тебя радует в этот момент?', answers:['Семья','Творчество'], allowOther:true},
-    {text: 'Кому бы ты хотел довериться?', answers:['Друзьям','Сам себе'], allowOther:false},
-    {text: 'Что бы ты хотел изменить прямо сейчас?', answers:['Эмоции','Действия'], allowOther:false},
-    {text: 'Чем хочешь поделиться?', answers:['История','Совет'], allowOther:false}
+    {text:'Что сейчас больше всего шумит внутри тебя?',answers:['Хочу говорить','Хочу молчать'],allowOther:true},
+    {text:'Что тебя радует в этот момент?',answers:['Семья','Творчество'],allowOther:true},
+    {text:'Кому бы ты хотел довериться?',answers:['Друзьям','Сам себе'],allowOther:false},
+    {text:'Что бы ты хотел изменить прямо сейчас?',answers:['Эмоции','Действия'],allowOther:false},
+    {text:'Чем хочешь поделиться?',answers:['История','Совет'],allowOther:false}
   ],
   'Свет': [
-    {text:'Чем хочешь поделиться сегодня?', answers:['Делиться светом','Помогать другим'], allowOther:true},
-    {text:'Что вдохновляет тебя быть светом?', answers:['Добро','Любовь'], allowOther:false},
-    {text:'Как хочешь помогать?', answers:['Советом','Действием'], allowOther:false},
-    {text:'Кому важнее всего помочь?', answers:['Близким','Незнакомым'], allowOther:false},
-    {text:'Что хочешь оставить после себя?', answers:['Свет','Энергию'], allowOther:false}
+    {text:'Чем хочешь поделиться сегодня?',answers:['Делиться светом','Помогать другим'],allowOther:true},
+    {text:'Что вдохновляет тебя быть светом?',answers:['Добро','Любовь'],allowOther:false},
+    {text:'Как хочешь помогать?',answers:['Советом','Действием'],allowOther:false},
+    {text:'Кому важнее всего помочь?',answers:['Близким','Незнакомым'],allowOther:false},
+    {text:'Что хочешь оставить после себя?',answers:['Свет','Энергию'],allowOther:false}
   ]
 };
 
-function fadeOut(el, cb){ el.style.opacity=0; setTimeout(()=>{ el.classList.remove('show'); if(cb) cb(); },500);}
-function fadeIn(el){ el.classList.add('show'); el.style.opacity=1;}
-function nextScreen(num){ const current=document.querySelector('.screen.show'); fadeOut(current, ()=>{ fadeIn(document.getElementById('screen'+num)); }); }
-function selectRole(chosenRole){ role=chosenRole; history.push(`Выбрана роль: ${role}`); questionIndex=0; showQuestion(); nextScreen(3); }
-function showQuestion(){ currentQuestion=questions[role][questionIndex]; document.getElementById('roleTitle').textContent=`Ты выбрал: ${role}`; document.getElementById('questionText').textContent=currentQuestion.text; const answerContainer=document.getElementById('answerButtons'); answerContainer.innerHTML=''; currentQuestion.answers.forEach(ans=>{ const btn=document.createElement('button'); btn.textContent=ans; btn.onclick=()=>answerSelected(ans); answerContainer.appendChild(btn); }); document.getElementById('otherInputContainer').style.display=currentQuestion.allowOther?'flex':'none'; }
-function answerSelected(answer){ history.push(`Вопрос ${questionIndex+1}: ${answer}`); nextQuestion(); }
-function submitOther(){ const input=document.getElementById('otherInput'); if(input.value.trim()==='') return; history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`); input.value=''; nextQuestion(); }
-function nextQuestion(){ questionIndex++; if(questionIndex>=questions[role].length){ nextScreen(4); }else{ showQuestion(); } }
-function goToProfile(){ localStorage.setItem('userRole', role); localStorage.setItem('history', JSON.stringify(history)); window.location.href='profile.html'; }
+function fadeOut(el,cb){el.style.opacity=0;setTimeout(()=>{el.classList.remove('show');if(cb) cb();},500);}
+function fadeIn(el){el.classList.add('show');el.style.opacity=1;}
+function nextScreen(num){const current=document.querySelector('.screen.show');fadeOut(current,()=>{fadeIn(document.getElementById('screen'+num));});}
+function selectRole(chosenRole){role=chosenRole;history.push(`Выбрана роль: ${role}`);questionIndex=0;showQuestion();nextScreen(3);}
+function showQuestion(){currentQuestion=questions[role][questionIndex];document.getElementById('roleTitle').textContent=`Ты выбрал: ${role}`;document.getElementById('questionText').textContent=currentQuestion.text;const answerContainer=document.getElementById('answerButtons');answerContainer.innerHTML='';currentQuestion.answers.forEach(ans=>{const btn=document.createElement('button');btn.textContent=ans;btn.onclick=()=>answerSelected(ans);answerContainer.appendChild(btn);});document.getElementById('otherInputContainer').style.display=currentQuestion.allowOther?'flex':'none';}
+function answerSelected(answer){history.push(`Вопрос ${questionIndex+1}: ${answer}`);nextQuestion();}
+function submitOther(){const input=document.getElementById('otherInput');if(input.value.trim()==='')return;history.push(`Вопрос ${questionIndex+1}: ${input.value.trim()}`);input.value='';nextQuestion();}
+function nextQuestion(){questionIndex++;if(questionIndex>=questions[role].length){nextScreen(4);}else{showQuestion();}}
+function goToProfile(){localStorage.setItem('userRole',role);localStorage.setItem('history',JSON.stringify(history));window.location.href='profile.html';}
+
+function toggleTheme(){
+  document.body.classList.toggle('light');
+}
 </script>
 </body>
 </html>
