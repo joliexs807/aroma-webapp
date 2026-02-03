@@ -1,3 +1,4 @@
+/* --- Цветовые переменные --- */
 :root {
   --bg-dark: #1a1a2e;
   --bg-light: #f7f0ff;
@@ -11,6 +12,7 @@
   --card-bg-light: rgba(0,0,0,0.05);
 }
 
+/* --- Базовые стили --- */
 body {
   font-family: 'Segoe UI', sans-serif;
   margin:0;
@@ -34,6 +36,7 @@ body.light {
   transition: all 0.4s;
 }
 
+/* --- Экраны --- */
 .screen {
   display: none;
   opacity: 0;
@@ -45,18 +48,14 @@ body.light {
   opacity: 1;
 }
 
+/* --- Заголовки --- */
 h1, h2 {
   margin-bottom: 20px;
   text-shadow: 0 0 10px var(--shadow-dark);
 }
 
-.choice-buttons, .answer-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.choice-btn, .answer-btn, .next-btn, .custom-file-btn, .theme-toggle {
+/* --- Кнопки --- */
+button, .choice-btn, .answer-btn, .next-btn, .custom-file-btn, .theme-toggle {
   background: var(--button-dark);
   color: #fff;
   border: none;
@@ -69,31 +68,40 @@ h1, h2 {
   transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
-.choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover, .theme-toggle:hover {
+button:hover, .choice-btn:hover, .answer-btn:hover, .next-btn:hover, .custom-file-btn:hover, .theme-toggle:hover {
   transform: scale(1.05);
   box-shadow: 0 0 40px var(--shadow-light);
 }
 
-body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn, body.light .theme-toggle {
+body.light button, body.light .choice-btn, body.light .answer-btn, body.light .next-btn, body.light .custom-file-btn, body.light .theme-toggle {
   background: var(--button-light);
   color: var(--text-light);
   box-shadow: 0 0 20px var(--shadow-light);
 }
 
+/* --- Кнопки выбора и ответы --- */
+.choice-buttons, .answer-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Поля ввода --- */
 input, textarea {
   width: 80%;
   padding: 15px;
-  margin: 10px 0;
+  margin: 10px auto;
   border-radius: 15px;
   border: none;
-  font-size: 1.1em;
+  font-size: 1.2em;
+  display: block;
 }
 
 .custom-input {
-  display: block;
-  margin: 20px auto;
+  margin-top: 20px;
 }
 
+/* --- Профиль --- */
 .profile-card {
   margin: 15px 0;
   padding: 20px;
@@ -103,24 +111,48 @@ input, textarea {
 }
 
 .profile-card:hover {
-  box-shadow: 0 0 30px var(--shadow-light);
+  box-shadow: 0 0 40px var(--shadow-light);
 }
 
 body.light .profile-card {
   background: var(--card-bg-light);
 }
 
+/* --- Аватар --- */
 .avatar-preview {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   margin: 15px auto;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  border: 3px solid var(--button-dark);
+  box-shadow: 0 0 30px var(--shadow-dark);
 }
 
-/* Аккордеон для правил */
+body.light .avatar-preview {
+  border-color: var(--button-light);
+  box-shadow: 0 0 30px var(--shadow-light);
+}
+
+/* --- Аккордеон для правил --- */
 .accordion-item {margin-bottom:10px; border-radius:15px; overflow:hidden; transition:0.3s;}
 .accordion-btn {width:100%; text-align:left; padding:12px 20px; font-size:1.1em; cursor:pointer; border:none; border-radius:0;}
 .accordion-content {max-height:0; overflow:hidden; background: rgba(0,0,0,0.15); color:#fff; padding:0 20px; transition:max-height 0.4s ease, padding 0.4s ease;}
 body.light .accordion-content {background: rgba(255,255,255,0.3); color: var(--text-light);}
+
+/* --- Плавные появления текста --- */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  to {opacity:1;}
+}
+
+/* --- Прочее --- */
+.profile-points {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
