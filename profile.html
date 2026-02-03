@@ -8,29 +8,79 @@
 <body>
 <button class="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
 
-<div class="container screen show">
-  <h1>Личный кабинет</h1>
+<div class="container profile-container screen show">
+
+  <h1>Личный кабинет ✨</h1>
   <p>Роль: <span id="profileRole"></span></p>
 
-  <div>
-    <input type="text" id="nickname" placeholder="Твой ник"/>
+  <!-- Никнейм -->
+  <div class="profile-card">
+    <label for="nickname">Никнейм</label>
+    <input type="text" id="nickname" placeholder="Твой ник">
   </div>
-  <div>
-    <input type="file" id="avatar" accept="image/*"/>
+
+  <!-- Аватар -->
+  <div class="profile-card">
+    <label for="avatar">Аватар</label>
+    <input type="file" id="avatar" accept="image/*">
+    <div id="avatarPreview" class="avatar-preview"></div>
   </div>
-  <div>
-    <textarea id="hobbies" placeholder="Хобби"></textarea>
+
+  <!-- Хобби -->
+  <div class="profile-card">
+    <label for="hobbies">Хобби</label>
+    <textarea id="hobbies" placeholder="Например: рисование, музыка..."></textarea>
   </div>
-  <div>
-    <textarea id="music" placeholder="Любимая музыка"></textarea>
+
+  <!-- Любимая музыка -->
+  <div class="profile-card">
+    <label for="music">Любимая музыка</label>
+    <textarea id="music" placeholder="Например: поп, рок, джаз..."></textarea>
   </div>
+
+  <!-- О себе -->
+  <div class="profile-card">
+    <label for="about">О себе</label>
+    <textarea id="about" placeholder="Расскажи немного о себе..."></textarea>
+  </div>
+
+  <!-- Цитата дня -->
+  <div class="profile-card">
+    <label for="quote">Цитата дня</label>
+    <input type="text" id="quote" placeholder="Вдохновляющая цитата">
+  </div>
+
+  <!-- Сохранить -->
+  <div class="profile-card" style="text-align:center;">
+    <button onclick="saveProfile()">Сохранить</button>
+  </div>
+
 </div>
 
 <script src="js/main.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
+  // Вставляем роль
   document.getElementById('profileRole').textContent = localStorage.getItem('userRole') || '';
+
+  // Предпросмотр аватара
+  const avatarInput = document.getElementById('avatar');
+  const avatarPreview = document.getElementById('avatarPreview');
+  avatarInput.addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(evt){
+        avatarPreview.style.backgroundImage = `url(${evt.target.result})`;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
 });
+
+function saveProfile(){
+  alert('Профиль сохранен ✨');
+}
 </script>
 </body>
 </html>
