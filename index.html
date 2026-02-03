@@ -141,8 +141,18 @@
   </div>
 </div>
 
-<!-- Экран 4 — Личный кабинет -->
+<!-- Экран 4 — Переход перед кабинетом -->
 <div id="screen4" class="screen">
+  <h1>Поздравляем! ✨</h1>
+  <p>Ты завершил свои вопросы. Теперь можешь перейти в личный кабинет, чтобы увидеть историю своих действий и очки.</p>
+  <div class="button-container">
+    <button onclick="nextScreen(5)">Перейти в кабинет</button>
+    <button onclick="restart()">Начать заново</button>
+  </div>
+</div>
+
+<!-- Экран 5 — Личный кабинет -->
+<div id="screen5" class="screen">
   <h1>Твой кабинет 🌒✨</h1>
   <p>Роль: <span id="userRole"></span></p>
   <p>Очки: <span id="userScore"></span></p>
@@ -198,8 +208,7 @@ function nextScreen(num) {
 
   const current = document.querySelector('.screen.show');
   fadeOut(current, () => {
-    if (num === 4) {
-      score = 20; // всем новичкам одинаково
+    if(num === 5) {
       showCabinet();
     }
     const next = document.getElementById('screen'+num);
@@ -254,7 +263,7 @@ function submitOther() {
 function nextQuestion() {
   questionIndex++;
   if(questionIndex >= questions[role].length) {
-    nextScreen(4);
+    nextScreen(4); // экран-переход перед кабинетом
   } else {
     showQuestion();
   }
@@ -263,7 +272,7 @@ function nextQuestion() {
 function showCabinet() {
   document.querySelector('.score').textContent = 'Очки: ' + score;
   document.getElementById('userRole').textContent = role;
-  document.getElementById('userScore').textContent = score;
+  document.getElementById('userScore').textContent = 20; // фиксированные очки
 
   const historyList = document.getElementById('historyList');
   historyList.innerHTML = '';
