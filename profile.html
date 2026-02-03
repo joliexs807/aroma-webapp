@@ -5,20 +5,33 @@
 <title>Личный кабинет — Аврора</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
-body{margin:0;font-family:'Comfortaa',cursive;background:linear-gradient(135deg,#0d0415,#2a1238);color:#fff;transition:background 0.5s,color 0.5s;}
-body.light{background:linear-gradient(135deg,#e0dff5,#fff0f5) !important;color:#222 !important;}
+
+:root {
+  --bg-dark: linear-gradient(135deg,#0d0415,#2a1238);
+  --bg-light: linear-gradient(135deg,#e0dff5,#fff0f5);
+  --text-dark: #fff;
+  --text-light: #222;
+  --button-dark: #b689f5;
+  --button-light: #d2aaff;
+  --shadow-dark: #b689f5;
+  --shadow-light: #d2aaff;
+}
+
+body{margin:0;font-family:'Comfortaa',cursive;background:var(--bg-dark);color:var(--text-dark);transition:background 0.5s,color 0.5s;}
+body.light{background:var(--bg-light);color:var(--text-light);}
 .container{max-width:900px;margin:auto;padding:30px;}
-h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px #b689f5,0 0 30px #d2aaff;transition:text-shadow 0.5s;}
-body.light h1{text-shadow:0 0 5px #b689f5,0 0 10px #d2aaff !important;}
+h1{text-align:center;margin-bottom:30px;text-shadow:0 0 10px rgba(0,0,0,0.6),0 0 20px var(--shadow-dark),0 0 30px var(--shadow-dark);}
+body.light h1{text-shadow:0 0 5px var(--shadow-light),0 0 10px var(--shadow-light);}
 label{display:block;margin-top:15px;font-weight:bold;}
 input[type=text],textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:5px;transition:box-shadow 0.5s;}
-.avatar-preview{margin-top:10px;width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid #b689f5;box-shadow:0 0 20px #b689f5;}
-.section{margin-bottom:25px;padding:15px;border-radius:15px;box-shadow:0 0 20px #b689f5;transition:box-shadow 0.5s;}
-body.light .section{box-shadow:0 0 15px #b689f5 !important;}
+.avatar-preview{margin-top:10px;width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--shadow-dark);box-shadow:0 0 20px var(--shadow-dark);}
+body.light .avatar-preview{border-color:var(--shadow-light);box-shadow:0 0 20px var(--shadow-light);}
+.section{margin-bottom:25px;padding:15px;border-radius:15px;box-shadow:0 0 20px var(--shadow-dark);}
+body.light .section{box-shadow:0 0 15px var(--shadow-light);}
 .history ul{list-style:none;padding:0;}
 .history li{margin-bottom:8px;background:rgba(255,255,255,0.1);padding:8px;border-radius:10px;}
-.theme-toggle{position:absolute;top:20px;left:20px;padding:8px 15px;border-radius:20px;border:none;cursor:pointer;background:#b689f5;color:#fff;}
-body.light .theme-toggle{background:#d2aaff !important;color:#222 !important;}
+.theme-toggle{position:absolute;top:20px;left:20px;padding:8px 15px;border-radius:20px;border:none;cursor:pointer;background: var(--button-dark); color:#fff;}
+body.light .theme-toggle{background: var(--button-light); color: var(--text-light);}
 </style>
 </head>
 <body>
@@ -74,10 +87,7 @@ body.light .theme-toggle{background:#d2aaff !important;color:#222 !important;}
 </div>
 
 <script>
-function toggleTheme(){
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');
-}
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');}
 
 const roleInput=document.getElementById('role');
 const historyList=document.getElementById('historyList');
@@ -85,25 +95,19 @@ const avatarInput=document.getElementById('avatarInput');
 const avatarPreview=document.getElementById('avatarPreview');
 
 window.addEventListener('DOMContentLoaded',()=>{
-  // применяем тему
-  const theme=localStorage.getItem('theme')||'dark';
-  if(theme==='light') document.body.classList.add('light');
+  const t=localStorage.getItem('theme')||'dark';
+  if(t==='light') document.body.classList.add('light');
 
-  // загружаем роль и историю
   const role=localStorage.getItem('userRole')||'';
   const history=JSON.parse(localStorage.getItem('history')||'[]');
   roleInput.value=role;
   history.forEach(item=>{
-    const li=document.createElement('li');
-    li.textContent=item;
-    historyList.appendChild(li);
+    const li=document.createElement('li'); li.textContent=item; historyList.appendChild(li);
   });
 });
 
-// аватар
 avatarInput.addEventListener('change',function(e){
-  const file=e.target.files[0];
-  if(!file) return;
+  const file=e.target.files[0]; if(!file) return;
   const reader=new FileReader();
   reader.onload=function(ev){ avatarPreview.src=ev.target.result; }
   reader.readAsDataURL(file);
